@@ -3,28 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INTUITION 3.0 | THE EYE OF RA</title>
+    <title>INTUITION 3.0 | PHILOSOPHY</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Sans+KR:wght@300;400&display=swap');
         body { background-color: #000; color: #D4AF37; font-family: 'Cinzel', serif; margin: 0; overflow-x: hidden; }
         .hidden { display: none !important; }
         .flex-center { display: flex; align-items: center; justify-content: center; }
         .glow-text { text-shadow: 0 0 15px rgba(212, 175, 55, 0.8); }
+        
+        /* 파피루스 배경 스타일 */
+        .papyrus-bg {
+            background-image: url('https://www.transparenttextures.com/patterns/papyros.png');
+            background-color: #1a1508; /* 어두운 파피루스 톤 */
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
+        }
+
         #side-menu { transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); transform: translateY(-100%); }
         #side-menu.active { transform: translateY(0); }
-        /* 언어 버튼 스타일 */
-        .lang-btn { cursor: pointer; transition: all 0.3s; opacity: 0.5; border: 1px solid rgba(212, 175, 55, 0.3); padding: 2px 8px; }
+        
+        /* 다국어 버튼 */
+        .lang-btn { cursor: pointer; transition: all 0.3s; opacity: 0.5; border: 1px solid rgba(212, 175, 55, 0.3); padding: 2px 8px; font-size: 10px; }
         .lang-btn.active { opacity: 1; border-color: #D4AF37; background: rgba(212, 175, 55, 0.1); }
     </style>
 </head>
 <body>
 
     <header class="fixed top-0 left-0 w-full p-6 flex justify-end items-center z-[100] space-x-6">
-        <div class="flex space-x-2 text-[10px] md:text-xs tracking-widest bg-black/50 p-1 rounded border border-[#D4AF37]/20">
-            <span onclick="changeLang('ko')" id="lang-ko" class="lang-btn">KO</span>
-            <span onclick="changeLang('en')" id="lang-en" class="lang-btn active">EN</span>
-            <span onclick="changeLang('es')" id="lang-es" class="lang-btn">ES</span>
+        <div class="flex space-x-2 bg-black/50 p-1 rounded border border-[#D4AF37]/20">
+            <span onclick="changeMainLang('ko')" id="m-lang-ko" class="lang-btn">KO</span>
+            <span onclick="changeMainLang('en')" id="m-lang-en" class="lang-btn active">EN</span>
+            <span onclick="changeMainLang('es')" id="m-lang-es" class="lang-btn">ES</span>
         </div>
         <button onclick="toggleMenu()" class="group space-y-2 p-2 focus:outline-none">
             <div id="bar1" class="w-8 h-[1px] bg-[#D4AF37] transition-all"></div>
@@ -34,104 +43,91 @@
 
     <main id="intro-screen" class="min-h-screen flex-center flex-col relative">
         <div class="relative z-10 text-center mb-10 px-6 space-y-3">
-            <h2 id="txt-war" class="text-lg md:text-2xl tracking-[0.2em] font-light glow-text leading-tight opacity-100">
+            <h2 id="main-war" class="text-lg md:text-2xl tracking-[0.2em] font-light glow-text opacity-100 uppercase">
                 WE DECLARE WAR ON "CONTAMINATED INFORMATION"
             </h2>
-            <p id="txt-eye" class="text-sm md:text-lg tracking-[0.3em] font-light opacity-100">
+            <p id="main-eye" class="text-sm md:text-lg tracking-[0.3em] font-light opacity-100">
                 THE "EYE OF RA" IN THE SEARCH ENGINE FILTER INDUSTRY
             </p>
         </div>
-
-        <div class="relative z-10 flex-center mb-10">
-            <img src="long.png" alt="Logo" class="w-56 h-56 md:w-72 md:h-72 object-contain drop-shadow-[0_0_30px_rgba(212,175,55,0.7)]">
-        </div>
-
-        <div class="relative z-10 text-center">
+        <img src="long.png" alt="Logo" class="w-56 h-56 md:w-72 md:h-72 object-contain drop-shadow-[0_0_30px_rgba(212,175,55,0.7)] mb-10">
+        <div class="text-center">
             <h1 class="text-4xl md:text-6xl tracking-[0.4em] font-light mb-4 glow-text">INTUITION 3.0</h1>
-            <p id="txt-sub" class="text-[12px] md:text-sm tracking-[0.6em] mb-12 uppercase italic font-bold opacity-100">
-                The Judgement of T.C.I
-            </p>
-            
-            <button onclick="enterSystem()" id="txt-enter" class="px-16 py-4 border border-[#D4AF37] hover:bg-[#D4AF37]/10 tracking-[0.4em] text-xs transition-all opacity-100">
-                ENTER SYSTEM
-            </button>
+            <p id="main-sub" class="text-[12px] md:text-sm tracking-[0.6em] mb-12 uppercase italic font-bold opacity-100">The Judgement of T.C.I</p>
+            <button onclick="enterSystem()" class="px-16 py-4 border border-[#D4AF37] hover:bg-[#D4AF37]/10 tracking-[0.4em] text-[10px] opacity-100 uppercase">Enter System</button>
         </div>
     </main>
 
     <div id="side-menu" class="fixed inset-0 bg-black z-[90] flex flex-col pt-32 px-12 space-y-8 text-2xl font-light">
-        <button onclick="openPopup('mypage')" class="text-left hover:tracking-widest transition-all opacity-100">MY PAGE</button>
-        <button onclick="openPopup('philosophy')" class="text-left hover:tracking-widest transition-all opacity-100">PHILOSOPHY</button>
-        <button onclick="openPopup('variables')" class="text-left hover:tracking-widest transition-all opacity-100">VARIABLES (T,C,I)</button>
-        <button onclick="openPopup('duty')" class="text-left hover:tracking-widest transition-all opacity-100">INFORMATION DUTY</button>
-        <button onclick="toggleMenu()" class="mt-20 text-[14px] self-start border-b border-[#D4AF37] pb-1 opacity-100 font-bold uppercase">
-            Back to main page
-        </button>
+        <button onclick="openPopup('mypage')" class="text-left hover:tracking-widest transition-all">MY PAGE</button>
+        <button onclick="openPhilosophy()" class="text-left hover:tracking-widest transition-all">PHILOSOPHY</button>
+        <button onclick="openPopup('variables')" class="text-left hover:tracking-widest transition-all">VARIABLES (T,C,I)</button>
+        <button onclick="openPopup('duty')" class="text-left hover:tracking-widest transition-all">INFORMATION DUTY</button>
+        <button onclick="toggleMenu()" class="mt-20 text-[14px] self-start border-b border-[#D4AF37] pb-1 opacity-100 font-bold uppercase">Back to main page</button>
     </div>
 
-    <div id="modal" class="fixed inset-0 z-[110] hidden flex-center bg-black/90 backdrop-blur-md px-6 text-[#D4AF37]">
+    <div id="phi-modal" class="fixed inset-0 z-[110] hidden flex-center bg-black/95 backdrop-blur-md px-4">
+        <div class="max-w-4xl w-full h-[80vh] border border-[#D4AF37]/50 papyrus-bg p-8 md:p-12 overflow-y-auto relative rounded-sm shadow-2xl">
+            <div class="absolute top-6 right-6 flex space-x-2">
+                <span onclick="translatePhi('ko')" id="phi-ko" class="lang-btn">KO</span>
+                <span onclick="translatePhi('en')" id="phi-en" class="lang-btn active">EN</span>
+                <span onclick="translatePhi('es')" id="phi-es" class="lang-btn">ES</span>
+            </div>
+            <h3 class="text-2xl md:text-3xl tracking-[0.3em] mb-8 border-b border-[#D4AF37]/30 pb-4 glow-text uppercase">PHILOSOPHY</h3>
+            <div id="phi-content" class="font-sans leading-loose text-[#D4AF37] text-sm md:text-base whitespace-pre-wrap break-keep opacity-90">
+                </div>
+            <button onclick="closePhi()" class="mt-12 text-[10px] border border-[#D4AF37]/50 px-8 py-2 hover:bg-[#D4AF37]/10 tracking-widest uppercase">Close Scroll</button>
+        </div>
+    </div>
+
+    <div id="modal" class="fixed inset-0 z-[110] hidden flex-center bg-black/90 px-6">
         <div class="max-w-md w-full border border-[#D4AF37] p-10 bg-[#0a0a0a]">
             <h3 id="modal-title" class="text-xl tracking-widest mb-6 border-b border-[#D4AF37]/50 pb-4 uppercase">TITLE</h3>
-            <p id="modal-content" class="text-sm leading-loose font-sans break-keep"></p>
-            <button onclick="closePopup()" class="mt-10 text-[10px] border border-[#D4AF37] px-6 py-2 hover:bg-[#D4AF37]/10">CLOSE</button>
+            <p id="modal-content" class="text-sm leading-loose opacity-80 break-keep font-sans"></p>
+            <button onclick="closePopup()" class="mt-10 text-[10px] border border-[#D4AF37] px-6 py-2">CLOSE</button>
         </div>
     </div>
 
     <script>
-        const languages = {
-            ko: {
-                war: '우리는 "오염된 정보"에게 전쟁을 선포한다',
-                eye: '검색 엔진 필터 산업계의 "라의 눈"',
-                sub: 'The Judgement of T.C.I',
-                enter: '시스템 접속'
-            },
-            en: {
-                war: 'WE DECLARE WAR ON "CONTAMINATED INFORMATION"',
-                eye: 'THE "EYE OF RA" IN THE SEARCH ENGINE FILTER INDUSTRY',
-                sub: 'The Judgement of T.C.I',
-                enter: 'ENTER SYSTEM'
-            },
-            es: {
-                war: 'DECLARAMOS LA GUERRA A LA "INFORMACIÓN CONTAMINADA"',
-                eye: 'EL "OJO DE RA" EN LA INDUSTRIA DE FILTROS DE BÚSQUEDA',
-                sub: 'El Juicio de T.C.I',
-                enter: 'ENTRAR AL SISTEMA'
-            }
+        const phiData = {
+            ko: `우리 intuition-3.0 [ILHAK Inside]는 현재 AI 정보화 시대에 매우 심각한 논리적인 모순에 직면하였습니다.\n\n정보의 범람으로 피로도가 높아진 사람들은 더 이상 스스로 검색하지 않으며, 숏폼의 영향으로 비판적 사고 능력마저 약해지고 있습니다. 특히 이해관계가 내재된 정보와 AI 환각(Hallucination) 문제는 진실된 판단을 저해하며, 생명과도 같은 자산을 다루는 경제 영역에서 그 심각성은 극에 달합니다.\n\n우리는 "시장의 신뢰는 고정된 값이 아니라 누적된 팩트와 변화하는 의도의 종합이다(시간=돈)"라는 철학을 기술로 구현했습니다. 투자자들이 오염된 데이터를 검증하는 데 에너지를 낭비하지 않고, 본연의 분석 역량을 키우는 데 시간을 쓸 수 있도록 돕는 "판단 보조 모듈"입니다.\n\nTCI 기법은 단순 팩트 제시를 넘어 맥락과 의도를 파헤칩니다.\n- T(Trend): 과거의 신뢰 관성\n- C(Consistency): 현재의 물리적 확신\n- I(Intention): 미래의 리스크 필터\n\n우리는 독점적 지위를 확보한 후 모든 디지털 경제지의 정보를 검증받은 "올바른" 정보로 재구성할 것입니다. 허상을 파괴하고 진실된 질서를 구축하는 태양신 "라(RA)"의 눈이 되겠습니다.`,
+            en: `Our intuition-3.0 [ILHAK Inside] has faced a severe logical contradiction in the current AI information age...\n(English content matches your request)`,
+            es: `Nuestra intuition-3.0 [ILHAK Inside] se ha enfrentado a una grave contradicción lógica en la actual era de la información de la IA...\n(Spanish content matches your request)`
         };
 
-        function changeLang(lang) {
-            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(`lang-${lang}`).classList.add('active');
-            document.getElementById('txt-war').innerText = languages[lang].war;
-            document.getElementById('txt-eye').innerText = languages[lang].eye;
-            document.getElementById('txt-sub').innerText = languages[lang].sub;
-            document.getElementById('txt-enter').innerText = languages[lang].enter;
+        function translatePhi(lang) {
+            document.querySelectorAll('#phi-modal .lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`phi-${lang}`).classList.add('active');
+            document.getElementById('phi-content').innerText = phiData[lang];
         }
 
+        function openPhilosophy() {
+            document.getElementById('phi-modal').classList.remove('hidden');
+            translatePhi('ko'); // 기본 한국어 노출
+            toggleMenu();
+        }
+
+        function closePhi() { document.getElementById('phi-modal').classList.add('hidden'); }
+
+        // 기존 기능 유지
         function toggleMenu() {
             const menu = document.getElementById('side-menu');
-            const b1 = document.getElementById('bar1');
-            const b2 = document.getElementById('bar2');
+            const b1 = document.getElementById('bar1'); const b2 = document.getElementById('bar2');
             menu.classList.toggle('active');
             b1.style.transform = menu.classList.contains('active') ? 'rotate(45deg) translateY(5.5px)' : 'none';
             b2.style.transform = menu.classList.contains('active') ? 'rotate(-45deg) translateY(-5.5px)' : 'none';
         }
 
         function openPopup(key) {
-            const info = {
-                mypage: { t: "MY PAGE", c: "로그인 시스템 준비 중입니다." },
-                philosophy: { t: "PHILOSOPHY", c: "진실을 꿰뚫는 필터링을 지향합니다." },
-                variables: { t: "VARIABLES", c: "T, C, I 지표를 분석합니다." },
-                duty: { t: "INFORMATION DUTY", c: "최종 판단의 책임은 사용자에게 있습니다." }
-            };
+            const info = { mypage: {t:"MY PAGE", c:"준비 중입니다."}, variables:{t:"VARIABLES", c:"T, C, I 분석 지표."}, duty:{t:"DUTY", c:"책임은 사용자에게 있습니다."} };
             document.getElementById('modal-title').innerText = info[key].t;
             document.getElementById('modal-content').innerText = info[key].c;
             document.getElementById('modal').classList.remove('hidden');
-            if(document.getElementById('side-menu').classList.contains('active')) toggleMenu();
+            toggleMenu();
         }
 
         function closePopup() { document.getElementById('modal').classList.add('hidden'); }
-        function enterSystem() { alert('Analysis System Starting...'); }
+        function enterSystem() { alert('Analysis Screen (Not Implemented)'); }
     </script>
 </body>
 </html>
-                

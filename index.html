@@ -6,34 +6,35 @@
     <title>INTUITION 3.0 | THE JUDGEMENT</title>
     <style>
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #050505; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; text-align: center; overflow: hidden; }
-        .bg-glow { position: absolute; width: 850px; height: 850px; background: radial-gradient(circle, rgba(212, 175, 55, 0.22) 0%, transparent 75%); z-index: 1; }
+        .bg-glow { position: absolute; width: 850px; height: 850px; background: radial-gradient(circle, rgba(212, 175, 55, 0.25) 0%, transparent 75%); z-index: 1; }
         .container { z-index: 2; position: relative; }
 
-        /* [핵심] 팀장님의 원본 이미지를 100% 싱크로 강제 출력 */
-        .ra-eye-original {
+        /* [팀장님 엄명] 원본 이미지 100% 싱크로 복원 */
+        .ra-eye-final {
             width: 380px; height: 380px; margin: 0 auto;
-            /* 파일 경로 에러를 차단하기 위해 원본 파일 주소를 직접 타격 */
-            background-image: url('https://raw.githubusercontent.com/jonghyeon0/Intuition3.0/main/1768224413222.jpg');
+            /* 이미지 확장자 리스크를 차단하기 위해 중복 호출 (소문자/대문자 동시 타격) */
+            background-image: url('https://raw.githubusercontent.com/jonghyeon0/Intuition3.0/main/1768224413222.jpg'), 
+                              url('https://raw.githubusercontent.com/jonghyeon0/Intuition3.0/main/1768224413222.JPG');
             background-size: contain; background-repeat: no-repeat; background-position: center;
-            filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0.85));
+            filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0.8));
             transition: 0.5s ease; cursor: pointer;
         }
-        .ra-eye-original:hover { transform: scale(1.04); filter: drop-shadow(0 0 70px rgba(212, 175, 55, 1)); }
+        .ra-eye-final:hover { transform: scale(1.03); filter: drop-shadow(0 0 70px rgba(212, 175, 55, 1)); }
 
-        h1 { font-size: 3rem; letter-spacing: 14px; font-weight: 300; margin-top: 25px; color: #d4af37; text-transform: uppercase; text-shadow: 0 0 25px rgba(212, 175, 55, 0.5); }
-        p { font-size: 1.1rem; letter-spacing: 6px; color: #888; margin-bottom: 55px; text-transform: uppercase; }
+        h1 { font-size: 3rem; letter-spacing: 14px; font-weight: 300; margin-top: 30px; color: #d4af37; text-transform: uppercase; }
+        p { font-size: 1.1rem; letter-spacing: 6px; color: #888; margin-bottom: 55px; }
         
-        .enter-btn { padding: 16px 65px; background: transparent; border: 2px solid #d4af37; color: #d4af37; text-transform: uppercase; letter-spacing: 4px; cursor: pointer; transition: 0.3s; font-weight: bold; }
-        .enter-btn:hover { background: #d4af37; color: #000; box-shadow: 0 0 30px rgba(212, 175, 55, 0.6); }
+        .enter-btn { padding: 18px 70px; background: transparent; border: 2px solid #d4af37; color: #d4af37; text-transform: uppercase; letter-spacing: 4px; cursor: pointer; transition: 0.3s; font-weight: bold; }
+        .enter-btn:hover { background: #d4af37; color: #000; box-shadow: 0 0 30px rgba(212, 175, 55, 0.5); }
     </style>
 </head>
 <body>
     <div class="bg-glow"></div>
     <div class="container">
-        <div class="ra-eye-original"></div>
+        <div class="ra-eye-final"></div>
         <h1>INTUITION 3.0</h1>
         <p>THE JUDGEMENT OF T.C.I</p>
-        <button class="enter-btn" onclick="location.href='https://intuition3-0.vercel.app/analysis'">START ANALYSIS</button>
+        <button class="enter-btn" onclick="location.href='/analysis'">START ANALYSIS</button>
     </div>
 </body>
 </html>

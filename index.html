@@ -1,184 +1,100 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Intuition | ILHACOS-OS</title>
-    <style>
-        :root { --gold: #d4af37; --bg: #000; --card: #111; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; text-align: center; }
-        .nav { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 30px; }
-        .lang-btn { background: none; border: 1px solid var(--gold); color: var(--gold); cursor: pointer; padding: 5px 12px; border-radius: 4px; font-size: 0.8rem; }
-        .container { max-width: 600px; margin: 0 auto; }
-        h1 { color: var(--gold); font-size: 2.2rem; letter-spacing: 4px; margin-bottom: 10px; }
-        .tagline { color: #888; font-size: 0.9rem; margin-bottom: 40px; }
-        .hotline-box { background: var(--card); border: 1px solid #333; padding: 30px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
-        input { width: 100%; padding: 15px; background: #000; border: 1px solid #444; color: #fff; border-radius: 6px; margin-bottom: 15px; box-sizing: border-box; outline: none; }
-        input:focus { border-color: var(--gold); }
-        button#analyze-btn { width: 100%; padding: 16px; background: var(--gold); color: #000; border: none; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.3s; }
-        button#analyze-btn:hover { background: #b8962d; }
-        
-        /* 분석 결과 창 스타일 */
-        #result-panel { margin-top: 30px; padding: 25px; border-radius: 8px; display: none; text-align: left; border-left: 4px solid var(--gold); background: #161616; }
-        .score-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-weight: bold; margin-bottom: 15px; }
-        .status-loading { color: var(--gold); font-weight: bold; }
-        .analysis-text { color: #ccc; line-height: 1.6; font-size: 0.95rem; }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INTUITION 3.0 | THE JUDGEMENT</title>
+    <style>
+        /* 테슬라 스타일 미니멀리즘 디자인 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #050505; /* 테슬라풍 딥 블랙 */
+            color: #ffffff;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* 중앙 정렬 컨테이너 */
+        .container {
+            z-index: 2;
+        }
+
+        /* 라의 눈 이미지 (팀장님의 시그니처) */
+        .ra-eye {
+            width: 250px; /* 크기 조절 */
+            height: auto;
+            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6));
+            transition: transform 0.5s ease;
+            cursor: pointer;
+        }
+
+        .ra-eye:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0.9));
+        }
+
+        /* 텍스트 스타일 */
+        h1 {
+            font-size: 2.5rem;
+            letter-spacing: 8px;
+            font-weight: 300;
+            margin-top: 30px;
+            text-transform: uppercase;
+            opacity: 0.9;
+        }
+
+        p {
+            font-size: 1rem;
+            letter-spacing: 3px;
+            color: #888;
+            margin-top: 10px;
+        }
+
+        /* 하단 입장 버튼 */
+        .enter-btn {
+            margin-top: 50px;
+            padding: 12px 40px;
+            background: transparent;
+            border: 1px solid #ffffff;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .enter-btn:hover {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        /* 배경 미세 애니메이션 (흐름의 추세 암시) */
+        .bg-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, rgba(0,0,0,0) 70%);
+            z-index: 1;
+        }
+    </style>
 </head>
 <body>
-    <div class="nav">
-        <button class="lang-btn" onclick="setLang('ko')">KO</button>
-        <button class="lang-btn" onclick="setLang('en')">EN</button>
-        <button class="lang-btn" onclick="setLang('es')">ES</button>
-    </div> 
-
-    <div class="container">
-        <h1>INTUITION 3.0</h1>
-        <p id="t-tagline" class="tagline">정면돌파: 데이터 오염으로부터 당신을 보호합니다.</p>
-        
-        <div class="hotline-box">
-            <h3 id="t-hotline" style="margin-top:0; color:var(--gold);">제보 핫라인</h3>
-            <input type="text" id="urlInput" placeholder="https://news-url.com...">
-            <button onclick="requestAnalysis()" id="t-btn">HCI 분석 시작</button>
-        </div> 
-
-        <div id="result-panel">
-            <div id="status-badge" class="score-badge">ANALYZING...</div>
-            <div id="analysis-content" class="analysis-text"></div>
-        </div>
-    </div> 
-
-    <script>
-        const i18n = {
-            ko: { tagline: "정면돌파: 데이터 오염으로부터 당신을 보호합니다.", hotline: "제보 핫라인", btn: "HCI 분석 시작", loading: "데이터 정합성 검증 중...", detail: "HCI 엔진이 기사의 과거 이력(H), 물리적 실체(C), 보도 의도(I)를 교차 분석하고 있습니다." },
-            en: { tagline: "Frontal Breakthrough: Protecting you from data pollution.", hotline: "Report Hotline", btn: "Start HCI Analysis", loading: "Verifying Data Integrity...", detail: "HCI Engine is cross-analyzing History(H), Consistency(C), and Intent(I)." },
-            es: { tagline: "Avance Frontal: Protegiéndote de la contaminación de datos.", hotline: "Línea Directa", btn: "Iniciar análisis", loading: "Verificando integridad...", detail: "El motor HCI está analizando el Historial(H), la Consistencia(C) y la Intención(I)." }
-        }; 
-
-        let currentLang = 'ko'; 
-
-        function setLang(lang) {
-            currentLang = lang;
-            document.getElementById('t-tagline').innerText = i18n[lang].tagline;
-            document.getElementById('t-hotline').innerText = i18n[lang].hotline;
-            document.getElementById('t-btn').innerText = i18n[lang].btn;
-        } 
-
-        async function requestAnalysis() {
-            const url = document.getElementById('urlInput').value;
-            if(!url) return alert("URL을 입력하십시오."); 
-
-            const panel = document.getElementById('result-panel');
-            const badge = document.getElementById('status-badge');
-            const content = document.getElementById('analysis-content'); 
-
-            panel.style.display = 'block';
-            badge.innerText = i18n[currentLang].loading;
-            badge.style.background = '#333';
-            badge.style.color = '#d4af37';
-            content.innerText = i18n[currentLang].detail; 
-
-            // [실전 엔진 연동부]
-            // 실제 배포 시에는 이곳에 fetch('https://api.ilhacos-os.com/analyze') 로직이 들어갑니다.
-            setTimeout(() => {
-                badge.innerText = "DANGER (HCI: 0.24)";
-                badge.style.background = "#721c24";
-                badge.style.color = "#f8d7da";
-                content.innerHTML = "<b>[분석 결과]</b> 해당 보도는 물리적 팩트와 과거 공시 데이터가 76% 이상 상충됩니다. 특정 세력의 단기 차익 실현을 위한 <b>'의도적 기만'</b> 가능성이 높습니다. (판단 보조 데이터)";
-            }, 2500);
-        }
-    </script>
-</body>
-</html><!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Intuition | ILHACOS-OS</title>
-    <style>
-        :root { --gold: #d4af37; --bg: #000; --card: #111; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; text-align: center; }
-        .nav { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 30px; }
-        .lang-btn { background: none; border: 1px solid var(--gold); color: var(--gold); cursor: pointer; padding: 5px 12px; border-radius: 4px; font-size: 0.8rem; }
-        .container { max-width: 600px; margin: 0 auto; }
-        h1 { color: var(--gold); font-size: 2.2rem; letter-spacing: 4px; margin-bottom: 10px; }
-        .tagline { color: #888; font-size: 0.9rem; margin-bottom: 40px; }
-        .hotline-box { background: var(--card); border: 1px solid #333; padding: 30px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
-        input { width: 100%; padding: 15px; background: #000; border: 1px solid #444; color: #fff; border-radius: 6px; margin-bottom: 15px; box-sizing: border-box; outline: none; }
-        input:focus { border-color: var(--gold); }
-        button#analyze-btn { width: 100%; padding: 16px; background: var(--gold); color: #000; border: none; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.3s; }
-        button#analyze-btn:hover { background: #b8962d; }
-        
-        /* 분석 결과 창 스타일 */
-        #result-panel { margin-top: 30px; padding: 25px; border-radius: 8px; display: none; text-align: left; border-left: 4px solid var(--gold); background: #161616; }
-        .score-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-weight: bold; margin-bottom: 15px; }
-        .status-loading { color: var(--gold); font-weight: bold; }
-        .analysis-text { color: #ccc; line-height: 1.6; font-size: 0.95rem; }
-    </style>
-</head>
-<body>
-    <div class="nav">
-        <button class="lang-btn" onclick="setLang('ko')">KO</button>
-        <button class="lang-btn" onclick="setLang('en')">EN</button>
-        <button class="lang-btn" onclick="setLang('es')">ES</button>
-    </div> 
-
-    <div class="container">
-        <h1>INTUITION 3.0</h1>
-        <p id="t-tagline" class="tagline">정면돌파: 데이터 오염으로부터 당신을 보호합니다.</p>
-        
-        <div class="hotline-box">
-            <h3 id="t-hotline" style="margin-top:0; color:var(--gold);">제보 핫라인</h3>
-            <input type="text" id="urlInput" placeholder="https://news-url.com...">
-            <button onclick="requestAnalysis()" id="t-btn">HCI 분석 시작</button>
-        </div> 
-
-        <div id="result-panel">
-            <div id="status-badge" class="score-badge">ANALYZING...</div>
-            <div id="analysis-content" class="analysis-text"></div>
-        </div>
-    </div> 
-
-    <script>
-        const i18n = {
-            ko: { tagline: "정면돌파: 데이터 오염으로부터 당신을 보호합니다.", hotline: "제보 핫라인", btn: "HCI 분석 시작", loading: "데이터 정합성 검증 중...", detail: "HCI 엔진이 기사의 과거 이력(H), 물리적 실체(C), 보도 의도(I)를 교차 분석하고 있습니다." },
-            en: { tagline: "Frontal Breakthrough: Protecting you from data pollution.", hotline: "Report Hotline", btn: "Start HCI Analysis", loading: "Verifying Data Integrity...", detail: "HCI Engine is cross-analyzing History(H), Consistency(C), and Intent(I)." },
-            es: { tagline: "Avance Frontal: Protegiéndote de la contaminación de datos.", hotline: "Línea Directa", btn: "Iniciar análisis", loading: "Verificando integridad...", detail: "El motor HCI está analizando el Historial(H), la Consistencia(C) y la Intención(I)." }
-        }; 
-
-        let currentLang = 'ko'; 
-
-        function setLang(lang) {
-            currentLang = lang;
-            document.getElementById('t-tagline').innerText = i18n[lang].tagline;
-            document.getElementById('t-hotline').innerText = i18n[lang].hotline;
-            document.getElementById('t-btn').innerText = i18n[lang].btn;
-        } 
-
-        async function requestAnalysis() {
-            const url = document.getElementById('urlInput').value;
-            if(!url) return alert("URL을 입력하십시오."); 
-
-            const panel = document.getElementById('result-panel');
-            const badge = document.getElementById('status-badge');
-            const content = document.getElementById('analysis-content'); 
-
-            panel.style.display = 'block';
-            badge.innerText = i18n[currentLang].loading;
-            badge.style.background = '#333';
-            badge.style.color = '#d4af37';
-            content.innerText = i18n[currentLang].detail; 
-
-            // [실전 엔진 연동부]
-            // 실제 배포 시에는 이곳에 fetch('https://api.ilhacos-os.com/analyze') 로직이 들어갑니다.
-            setTimeout(() => {
-                badge.innerText = "DANGER (HCI: 0.24)";
-                badge.style.background = "#721c24";
-                badge.style.color = "#f8d7da";
-                content.innerHTML = "<b>[분석 결과]</b> 해당 보도는 물리적 팩트와 과거 공시 데이터가 76% 이상 상충됩니다. 특정 세력의 단기 차익 실현을 위한 <b>'의도적 기만'</b> 가능성이 높습니다. (판단 보조 데이터)";
-            }, 2500);
-        }
-    </script>
+    <div class="bg-glow"></div>
+    <div class="container">
+        <img src="1768224413222.jpg" alt="Eye of Ra" class="ra-eye">
+        <h1>INTUITION 3.0</h1>
+        <p>THE JUDGEMENT OF T.C.I</p>
+        <button class="enter-btn">ENTER SYSTEM</button>
+    </div>
 </body>
 </html>
-

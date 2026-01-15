@@ -1,4 +1,4 @@
-       <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -12,20 +12,21 @@
         .flex-center { display: flex; align-items: center; justify-content: center; }
         .glow-text { text-shadow: 0 0 15px rgba(212, 175, 55, 0.8); }
         
-        /* 아이콘 섹션 스타일 */
-        .status-box { flex: 1; max-width: 100px; text-align: center; cursor: pointer; transition: transform 0.3s; }
+        /* 아이콘 섹션 (0.4배 크기 복구) */
+        .status-box { flex: 1; max-width: 100px; text-align: center; cursor: pointer; transition: transform 0.3s; z-index: 50; }
         .status-box:hover { transform: translateY(-5px); }
         .icon-circle { 
             width: 100%; aspect-ratio: 1/1; border-radius: 50%; border: 1px solid rgba(212, 175, 55, 0.3);
             display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 0.5rem;
             background-color: #050505;
         }
-        .icon-circle img { width: 100%; height: 100%; object-fit: cover; }
+        .icon-circle img { width: 100%; height: 100%; object-fit: cover; display: block; }
         
-        .bg-danger { background: radial-gradient(circle, #ff0000 0%, #000 100%); }
-        .bg-warning { background: radial-gradient(circle, #ff8800 0%, #000 100%); }
-        .bg-safe { background: radial-gradient(circle, #00ff00 0%, #000 100%); }
-        .bg-deep { background: radial-gradient(circle, #0088ff 0%, #000 100%); }
+        /* 상태별 발광 효과 */
+        .bg-danger { background: radial-gradient(circle, #ff0000 0%, #000 100%); box-shadow: 0 0 10px rgba(255, 0, 0, 0.3); }
+        .bg-warning { background: radial-gradient(circle, #ff8800 0%, #000 100%); box-shadow: 0 0 10px rgba(255, 136, 0, 0.3); }
+        .bg-safe { background: radial-gradient(circle, #00ff00 0%, #000 100%); box-shadow: 0 0 10px rgba(0, 255, 0, 0.3); }
+        .bg-deep { background: radial-gradient(circle, #0088ff 0%, #000 100%); box-shadow: 0 0 10px rgba(0, 136, 255, 0.3); }
 
         /* 메뉴 스타일 */
         #side-menu { transition: transform 0.5s ease; transform: translateY(-100%); z-index: 150; position: fixed; inset: 0; background: black; }
@@ -46,33 +47,33 @@
 <body>
 
     <header class="fixed top-0 left-0 w-full p-6 flex justify-end items-center z-[200] space-x-6">
-        <div class="flex space-x-3 text-[10px] md:text-xs tracking-widest border-r border-[#D4AF37]/30 pr-6">
+        <div class="flex space-x-3 text-[10px] md:text-xs tracking-widest border-r border-[#D4AF37]/30 pr-6 bg-black/40 p-2 rounded">
             <span onclick="changeMainLang('ko')" id="main-ko" class="lang-btn active">KO</span>
             <span onclick="changeMainLang('en')" id="main-en" class="lang-btn">EN</span>
             <span onclick="changeMainLang('es')" id="main-es" class="lang-btn">ES</span>
         </div>
-        <button onclick="toggleMenu()" class="group space-y-2 p-2 focus:outline-none">
+        <button onclick="toggleMenu()" class="group space-y-2 p-2 focus:outline-none bg-black/40 rounded">
             <div id="bar1" class="w-8 h-[1px] bg-[#D4AF37] transition-all"></div>
             <div id="bar2" class="w-8 h-[1px] bg-[#D4AF37] transition-all"></div>
         </button>
     </header>
 
     <main class="min-h-screen flex flex-col items-center justify-center pt-20">
-        <div class="flex justify-center gap-4 md:gap-8 w-full max-w-md mb-6 px-4">
+        <div class="flex justify-center gap-4 md:gap-8 w-full max-w-md mb-6 px-4 relative z-50">
             <div onclick="openTab('danger')" class="status-box">
-                <div class="icon-circle bg-danger"><img src="1768481905101.jpg"></div>
+                <div class="icon-circle bg-danger"><img src="1768481905101.jpg" onerror="this.src='https://via.placeholder.com/100/FF0000/FFFFFF?text=Danger'"></div>
                 <p class="text-[8px] font-bold text-red-500 uppercase tracking-tighter">Danger</p>
             </div>
             <div onclick="openTab('warning')" class="status-box">
-                <div class="icon-circle bg-warning"><img src="1768482887613.jpg"></div>
+                <div class="icon-circle bg-warning"><img src="1768482887613.jpg" onerror="this.src='https://via.placeholder.com/100/FF8800/FFFFFF?text=Warning'"></div>
                 <p class="text-[8px] font-bold text-orange-500 uppercase tracking-tighter">Warning</p>
             </div>
             <div onclick="openTab('safe')" class="status-box">
-                <div class="icon-circle bg-safe"><img src="1768482201296.jpg"></div>
+                <div class="icon-circle bg-safe"><img src="1768482201296.jpg" onerror="this.src='https://via.placeholder.com/100/00FF00/FFFFFF?text=Safe'"></div>
                 <p class="text-[8px] font-bold text-green-500 uppercase tracking-tighter">Safe</p>
             </div>
             <div onclick="openTab('deep')" class="status-box">
-                <div class="icon-circle bg-deep"><img src="1768482336028.jpg"></div>
+                <div class="icon-circle bg-deep"><img src="1768482336028.jpg" onerror="this.src='https://via.placeholder.com/100/0088FF/FFFFFF?text=Deep'"></div>
                 <p class="text-[8px] font-bold text-blue-500 uppercase tracking-tighter">Deep Truth</p>
             </div>
         </div>
@@ -175,7 +176,7 @@
         function openTab(tab) {
             activeTab = tab;
             document.getElementById('unified-modal').classList.remove('hidden');
-            translateTab('ko'); // 기본 한국어 노출
+            translateTab('ko');
             if(['philosophy', 'variables', 'duty', 'mypage'].includes(tab)) toggleMenu();
         }
 
@@ -188,12 +189,10 @@
         }
 
         function closeTab() { document.getElementById('unified-modal').classList.add('hidden'); }
-        function toggleMenu() { 
-            const menu = document.getElementById('side-menu');
-            menu.classList.toggle('active'); 
-        }
-        function enterSystem() { alert("System Analysis Mode..."); }
+        function toggleMenu() { document.getElementById('side-menu').classList.toggle('active'); }
+        function enterSystem() { alert("System Initializing..."); }
     </script>
 </body>
 </html>
+
 

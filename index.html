@@ -10,91 +10,130 @@
         body { background-color: #000; color: #D4AF37; font-family: 'Cinzel', serif; margin: 0; overflow-x: hidden; }
         .hidden { display: none !important; }
         .flex-center { display: flex; align-items: center; justify-content: center; }
+        .glow-text { text-shadow: 0 0 15px rgba(212, 175, 55, 0.8); }
         
-        /* 아이콘 레이아웃 및 효과 */
-        .status-container { display: flex; justify-content: center; gap: 2rem; width: 100%; margin-bottom: 2rem; }
-        .status-box { flex: 1; max-width: 140px; text-align: center; cursor: pointer; transition: transform 0.3s; }
-        .status-box:hover { transform: translateY(-10px); }
+        /* 0.4배 크기 아이콘 스타일 */
+        .status-box { flex: 1; max-width: 100px; text-align: center; cursor: pointer; transition: transform 0.3s; }
+        .status-box:hover { transform: translateY(-5px); }
         .icon-circle { 
             width: 100%; aspect-ratio: 1/1; border-radius: 50%; border: 1px solid rgba(212, 175, 55, 0.3);
             display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 0.5rem;
         }
         
         /* 상태별 그라데이션 */
-        .bg-danger { background: radial-gradient(circle, #ff0000 0%, #220000 100%); shadow: 0 0 15px #ff0000; }
-        .bg-warning { background: radial-gradient(circle, #ff8800 0%, #221100 100%); shadow: 0 0 15px #ff8800; }
-        .bg-safe { background: radial-gradient(circle, #00ff00 0%, #002200 100%); shadow: 0 0 15px #00ff00; }
-        .bg-deep { background: radial-gradient(circle, #0088ff 0%, #001133 100%); shadow: 0 0 15px #0088ff; }
+        .bg-danger { background: radial-gradient(circle, #ff0000 0%, #220000 100%); }
+        .bg-warning { background: radial-gradient(circle, #ff8800 0%, #221100 100%); }
+        .bg-safe { background: radial-gradient(circle, #00ff00 0%, #002200 100%); }
+        .bg-deep { background: radial-gradient(circle, #0088ff 0%, #001133 100%); }
 
-        /* 파피루스 모달 스타일 */
-        .papyrus-scroll {
-            background-image: url('papyrus_texture.jpg'); /* 업로드한 파피루스 이미지 */
-            background-color: #c2a371; background-size: cover;
-            border-left: 15px solid #222; border-right: 15px solid #222;
-        }
+        /* 메뉴 및 언어 선택기 */
+        #side-menu { transition: transform 0.5s ease; transform: translateY(-100%); }
+        #side-menu.active { transform: translateY(0); }
+        .lang-btn { cursor: pointer; opacity: 0.5; transition: 0.3s; }
+        .lang-btn.active { opacity: 1; border-bottom: 1px solid #D4AF37; }
+
+        /* 파피루스 모달 */
+        .papyrus-bg { background-color: #c2a371; background-image: url('https://www.transparenttextures.com/patterns/papyros.png'); color: #1a1508; }
     </style>
 </head>
 <body>
 
-    <main id="intro-screen" class="min-h-screen flex flex-col items-center justify-center p-4">
+    <header class="fixed top-0 left-0 w-full p-6 flex justify-end items-center z-[100] space-x-6">
+        <div class="flex space-x-3 text-[10px] md:text-xs tracking-widest border-r border-[#D4AF37]/30 pr-6">
+            <span onclick="changeLang('ko')" id="lang-ko" class="lang-btn">KO</span>
+            <span onclick="changeLang('en')" id="lang-en" class="lang-btn active">EN</span>
+            <span onclick="changeLang('es')" id="lang-es" class="lang-btn">ES</span>
+        </div>
+        <button onclick="toggleMenu()" class="group space-y-2 p-2 focus:outline-none">
+            <div id="bar1" class="w-8 h-[1px] bg-[#D4AF37] transition-all"></div>
+            <div id="bar2" class="w-8 h-[1px] bg-[#D4AF37] transition-all"></div>
+        </button>
+    </header>
+
+    <main id="intro-screen" class="min-h-screen flex flex-col items-center justify-center pt-20">
         
-        <div class="status-container relative z-20">
+        <div class="flex justify-center gap-4 md:gap-8 w-full max-w-md mb-6 px-4">
             <div onclick="openScroll('danger')" class="status-box">
-                <div class="icon-circle bg-danger"><img src="1768478515365.jpg" class="w-full h-full object-cover opacity-80"></div>
-                <p class="text-[10px] tracking-widest font-bold text-red-500">DANGER</p>
+                <div class="icon-circle bg-danger"><img src="1768478515365.jpg" class="w-full h-full object-cover"></div>
+                <p class="text-[8px] tracking-tighter text-red-500 font-bold">DANGER</p>
             </div>
             <div onclick="openScroll('warning')" class="status-box">
-                <div class="icon-circle bg-warning"><img src="1768478520039.jpg" class="w-full h-full object-cover opacity-80"></div>
-                <p class="text-[10px] tracking-widest font-bold text-orange-500">WARNING</p>
+                <div class="icon-circle bg-warning"><img src="1768478520039.jpg" class="w-full h-full object-cover"></div>
+                <p class="text-[8px] tracking-tighter text-orange-500 font-bold">WARNING</p>
             </div>
             <div onclick="openScroll('safe')" class="status-box">
-                <div class="icon-circle bg-safe"><img src="1768478522258.jpg" class="w-full h-full object-cover opacity-80"></div>
-                <p class="text-[10px] tracking-widest font-bold text-green-500">SAFE</p>
+                <div class="icon-circle bg-safe"><img src="1768478522258.jpg" class="w-full h-full object-cover"></div>
+                <p class="text-[8px] tracking-tighter text-green-500 font-bold">SAFE</p>
             </div>
             <div onclick="openScroll('deep')" class="status-box">
-                <div class="icon-circle bg-deep"><img src="1768478524524.jpg" class="w-full h-full object-cover opacity-80"></div>
-                <p class="text-[10px] tracking-widest font-bold text-blue-500">DEEP TRUTH</p>
+                <div class="icon-circle bg-deep"><img src="1768478524524.jpg" class="w-full h-full object-cover"></div>
+                <p class="text-[8px] tracking-tighter text-blue-500 font-bold">DEEP TRUTH</p>
             </div>
         </div>
 
-        <div class="mb-8 relative z-10">
-            <img src="long.png" class="w-48 h-48 md:w-64 md:h-64 object-contain drop-shadow-[0_0_20px_rgba(212,175,55,0.5)]">
+        <div class="text-center mb-10 px-6">
+            <h2 id="txt-war" class="text-lg md:text-2xl tracking-[0.2em] font-light glow-text leading-tight mb-2">WE DECLARE WAR ON "CONTAMINATED INFORMATION"</h2>
+            <p id="txt-eye" class="text-sm md:text-lg tracking-[0.3em] font-light italic">THE "EYE OF RA" IN THE SEARCH ENGINE FILTER INDUSTRY</p>
         </div>
 
-        <div class="text-center z-10">
-            <h1 class="text-4xl md:text-6xl tracking-[0.4em] font-light mb-4">INTUITION 3.0</h1>
-            <p class="text-[12px] md:text-sm tracking-[0.6em] mb-12 uppercase italic opacity-100 font-bold">The Judgement of T.C.I</p>
-            <button onclick="enterSystem()" class="px-16 py-3 border border-[#D4AF37] hover:bg-[#D4AF37]/10 tracking-[0.4em] text-xs font-bold uppercase">Enter System</button>
+        <div class="mb-10">
+            <img src="long.png" class="w-56 h-56 md:w-64 md:h-64 object-contain drop-shadow-[0_0_20px_rgba(212,175,55,0.5)]">
+        </div>
+
+        <div class="text-center">
+            <h1 class="text-4xl md:text-6xl tracking-[0.4em] font-light mb-4 glow-text">INTUITION 3.0</h1>
+            <p class="text-[12px] md:text-sm tracking-[0.6em] mb-12 uppercase italic font-bold">The Judgement of T.C.I</p>
+            <button onclick="enterSystem()" id="txt-enter" class="px-16 py-4 border border-[#D4AF37] hover:bg-[#D4AF37]/10 tracking-[0.4em] text-xs font-bold uppercase">ENTER SYSTEM</button>
         </div>
     </main>
 
-    <div id="scroll-modal" class="fixed inset-0 z-[100] hidden flex-center bg-black/90 backdrop-blur-md p-6">
-        <div class="papyrus-scroll max-w-lg w-full h-[70vh] p-8 flex flex-col items-center text-black shadow-2xl overflow-y-auto">
-            <img id="scroll-img" src="" class="w-32 h-auto mb-6 rounded-lg shadow-lg">
-            <h3 id="scroll-title" class="text-2xl font-bold tracking-tighter mb-4 border-b border-black/20 pb-2">TITLE</h3>
-            <p id="scroll-content" class="text-sm leading-relaxed font-serif text-center break-keep"></p>
-            <button onclick="closeScroll()" class="mt-10 border-2 border-black px-6 py-2 font-bold text-xs hover:bg-black hover:text-white transition-all">CLOSE SCROLL</button>
+    <div id="side-menu" class="fixed inset-0 bg-black z-[90] flex flex-col pt-32 px-12 space-y-8 text-2xl font-light">
+        <button onclick="openPopup('mypage')" class="text-left hover:tracking-widest transition-all">MY PAGE (LOGIN)</button>
+        <button onclick="openPopup('phi')" class="text-left hover:tracking-widest transition-all">PHILOSOPHY</button>
+        <button onclick="openPopup('var')" class="text-left hover:tracking-widest transition-all">VARIABLES (TCI)</button>
+        <button onclick="openPopup('duty')" class="text-left hover:tracking-widest transition-all">INFORMATION DUTY</button>
+        <button onclick="toggleMenu()" class="mt-20 text-[14px] self-start border-b border-[#D4AF37] pb-1 font-bold uppercase">Back to main page</button>
+    </div>
+
+    <div id="scroll-modal" class="fixed inset-0 z-[110] hidden flex-center bg-black/95 backdrop-blur-md p-6">
+        <div class="papyrus-bg max-w-lg w-full h-[60vh] p-8 flex flex-col items-center shadow-2xl overflow-y-auto border-x-[10px] border-[#333]">
+            <h3 id="scroll-title" class="text-xl font-bold mb-4 border-b border-black/20 pb-2 uppercase">TITLE</h3>
+            <p id="scroll-content" class="text-sm leading-relaxed text-center break-keep font-serif"></p>
+            <button onclick="closeScroll()" class="mt-10 border border-black px-6 py-2 font-bold text-[10px] hover:bg-black hover:text-white transition-all">CLOSE SCROLL</button>
         </div>
     </div>
 
     <script>
-        const scrollData = {
-            danger: { t: "OSIRIS: DANGER", i: "1768478515365.jpg", c: "오염된 정보가 임계치를 넘었습니다. 논리적 환각이 지배하는 구간입니다." },
-            warning: { t: "ANUBIS: WARNING", i: "1768478520039.jpg", c: "의도된 데이터 왜곡이 포착되었습니다. 팩트 사이의 모순을 주의하십시오." },
-            safe: { t: "MAAT: SAFE", i: "1768478522258.jpg", c: "정보의 질서가 회복되었습니다. 신뢰할 수 있는 구간입니다." },
-            deep: { t: "ISIS: DEEP TRUTH", i: "1768478524524.jpg", c: "완벽한 진실의 질서가 구축되었습니다. 리스크 필터가 제거된 최상의 상태입니다." }
+        const languages = {
+            ko: { war: '우리는 "오염된 정보"에 전쟁을 선포한다', eye: '검색 엔진 필터 산업계의 "라의 눈"', enter: '시스템 접속' },
+            en: { war: 'WE DECLARE WAR ON "CONTAMINATED INFORMATION"', eye: 'THE "EYE OF RA" IN THE SEARCH ENGINE FILTER INDUSTRY', enter: 'ENTER SYSTEM' },
+            es: { war: 'DECLARAMOS LA GUERRA A LA "INFORMACIÓN CONTAMINADA"', eye: 'EL "OJO DE RA" EN LA INDUSTRIA DE FILTROS DE BÚSQUEDA', enter: 'ENTRAR AL SISTEMA' }
         };
 
-        function openScroll(type) {
-            const modal = document.getElementById('scroll-modal');
-            document.getElementById('scroll-title').innerText = scrollData[type].t;
-            document.getElementById('scroll-img').src = scrollData[type].i;
-            document.getElementById('scroll-content').innerText = scrollData[type].c;
-            modal.classList.remove('hidden');
+        const scrollData = {
+            danger: { t: "DANGER", c: "오염된 정보가 임계치를 넘었습니다. 논리적 환각이 지배하는 구간입니다." },
+            warning: { t: "WARNING", c: "의도된 데이터 왜곡이 포착되었습니다. 팩트 사이의 모순을 주의하십시오." },
+            safe: { t: "SAFE", c: "정보의 질서가 회복되었습니다. 신뢰할 수 있는 구간입니다." },
+            deep: { t: "DEEP TRUTH", c: "완벽한 진실의 질서가 구축되었습니다. 리스크 필터가 제거된 최상의 상태입니다." }
+        };
+
+        function changeLang(lang) {
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`lang-${lang}`).classList.add('active');
+            document.getElementById('txt-war').innerText = languages[lang].war;
+            document.getElementById('txt-eye').innerText = languages[lang].eye;
+            document.getElementById('txt-enter').innerText = languages[lang].enter;
         }
 
+        function toggleMenu() { document.getElementById('side-menu').classList.toggle('active'); }
+        function openScroll(type) {
+            document.getElementById('scroll-title').innerText = scrollData[type].t;
+            document.getElementById('scroll-content').innerText = scrollData[type].c;
+            document.getElementById('scroll-modal').classList.remove('hidden');
+        }
         function closeScroll() { document.getElementById('scroll-modal').classList.add('hidden'); }
-        function enterSystem() { alert('시스템 분석 모듈로 이동합니다.'); }
+        function openPopup(key) { alert(key + " 정보창을 엽니다."); toggleMenu(); }
+        function enterSystem() { alert('분석 시스템 시작'); }
     </script>
 </body>
 </html>

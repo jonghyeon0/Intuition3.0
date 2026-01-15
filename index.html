@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INTUITION 3.0</title>
+    <title>INTUITION 3.0 | THE EYE OF RA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
         body { background-color: #000; color: #D4AF37; font-family: 'Cinzel', serif; margin: 0; overflow-x: hidden; }
         .hidden { display: none !important; }
         .flex-center { display: flex; align-items: center; justify-content: center; }
-        /* 애플 스타일 메뉴 애니메이션 */
+        /* 애니메이션 및 특수 효과 */
+        .glow-text { text-shadow: 0 0 15px rgba(212, 175, 55, 0.5); }
         #side-menu { transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); transform: translateY(-100%); }
         #side-menu.active { transform: translateY(0); }
     </style>
@@ -18,88 +19,99 @@
 <body>
 
     <header class="fixed top-0 left-0 w-full p-6 flex justify-end z-[100]">
-        <button onclick="toggleMenu()" class="group space-y-2 p-2">
+        <button onclick="toggleMenu()" class="group space-y-2 p-2 focus:outline-none">
             <div id="bar1" class="w-8 h-[1px] bg-[#D4AF37] transition-all"></div>
             <div id="bar2" class="w-8 h-[1px] bg-[#D4AF37] transition-all"></div>
         </button>
     </header>
 
     <main id="intro-screen" class="min-h-screen flex-center flex-col relative transition-opacity duration-1000">
-        <div class="absolute inset-0 flex-center">
-            <div class="w-[500px] h-[500px] bg-yellow-900/10 rounded-full blur-[120px]"></div>
+        <div class="absolute inset-0 flex-center pointer-events-none">
+            <div class="w-[600px] h-[600px] bg-yellow-900/10 rounded-full blur-[120px]"></div>
         </div>
-        <img src="long.png" alt="Logo" class="w-48 h-48 md:w-64 md:h-64 object-contain mb-12 relative z-10">
-        <h1 class="text-4xl md:text-6xl tracking-[0.4em] font-light mb-4">INTUITION 3.0</h1>
-        <p class="text-xs tracking-[0.6em] opacity-60 mb-16">THE JUDGEMENT OF T.C.I</p>
-        <button onclick="enterSystem()" class="px-12 py-3 border border-[#D4AF37]/40 hover:bg-[#D4AF37]/10 tracking-[0.3em] text-sm transition-all">
-            ENTER SYSTEM
-        </button>
+
+        <div class="relative z-10 text-center mb-12 px-4 space-y-2">
+            <h2 class="text-xl md:text-2xl tracking-[0.2em] font-light glow-text leading-relaxed">
+                WE DECLARE WAR ON "CONTAMINATED INFORMATION"
+            </h2>
+            <p class="text-lg md:text-xl tracking-[0.3em] font-light opacity-80">
+                THE "EYE OF RA" IN THE SEARCH ENGINE FILTER INDUSTRY
+            </p>
+        </div>
+
+        <div class="relative z-10 flex-center mb-10">
+            <img src="long.png" alt="Logo" class="w-56 h-56 md:w-72 md:h-72 object-contain drop-shadow-[0_0_30px_rgba(212,175,55,0.6)]">
+        </div>
+
+        <div class="relative z-10 text-center">
+            <h1 class="text-4xl md:text-6xl tracking-[0.4em] font-light mb-4 glow-text">INTUITION 3.0</h1>
+            <p class="text-[10px] md:text-xs tracking-[0.7em] opacity-50 mb-16 uppercase italic">The Judgement of T.C.I</p>
+            
+            <button onclick="enterSystem()" class="px-16 py-4 border border-[#D4AF37]/40 hover:bg-[#D4AF37]/10 tracking-[0.4em] text-xs transition-all duration-500 ease-in-out">
+                ENTER SYSTEM
+            </button>
+        </div>
     </main>
 
-    <div id="side-menu" class="fixed inset-0 bg-black z-[90] flex flex-col pt-32 px-12 space-y-6 text-2xl font-light">
-        <button onclick="openPopup('mypage')" class="text-left hover:opacity-50 transition">마이페이지 (로그인)</button>
-        <button onclick="openPopup('philosophy')" class="text-left hover:opacity-50 transition">철학 (비전)</button>
-        <button onclick="openPopup('variables')" class="text-left hover:opacity-50 transition">변수 (T,C,I)</button>
-        <button onclick="openPopup('duty')" class="text-left hover:opacity-50 transition">정보확인의무</button>
+    <div id="side-menu" class="fixed inset-0 bg-black z-[90] flex flex-col pt-32 px-12 space-y-8 text-2xl font-light">
+        <button onclick="openPopup('mypage')" class="text-left hover:tracking-widest transition-all duration-300">MY PAGE</button>
+        <button onclick="openPopup('philosophy')" class="text-left hover:tracking-widest transition-all duration-300">PHILOSOPHY</button>
+        <button onclick="openPopup('variables')" class="text-left hover:tracking-widest transition-all duration-300">VARIABLES (T,C,I)</button>
+        <button onclick="openPopup('duty')" class="text-left hover:tracking-widest transition-all duration-300">INFORMATION DUTY</button>
+        <button onclick="toggleMenu()" class="mt-20 text-[10px] opacity-40 self-start border-b border-[#D4AF37]/40">BACK TO MAIN</button>
     </div>
 
     <section id="analysis-screen" class="hidden min-h-screen flex-center flex-col bg-[#050505]">
-        <div class="w-full max-w-2xl px-8 text-center">
-            <h2 class="text-2xl tracking-[1em] mb-12 animate-pulse">ANALYZING...</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-sm tracking-widest">
-                <div class="p-6 border border-[#D4AF37]/20">TEMPERAMENT<br><span class="text-2xl">84%</span></div>
-                <div class="p-6 border border-[#D4AF37]/20">CHARACTER<br><span class="text-2xl">92%</span></div>
-                <div class="p-6 border border-[#D4AF37]/20">INTELLECT<br><span class="text-2xl">78%</span></div>
+        <div class="w-full max-w-3xl px-8 text-center">
+            <h2 class="text-2xl tracking-[1em] mb-12 animate-pulse glow-text uppercase">System Core Analysis</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm tracking-widest uppercase">
+                <div class="p-10 border border-[#D4AF37]/20 bg-black/40">Temperament<br><span class="text-3xl mt-2 block">Pending</span></div>
+                <div class="p-10 border border-[#D4AF37]/20 bg-black/40">Character<br><span class="text-3xl mt-2 block">Pending</span></div>
+                <div class="p-10 border border-[#D4AF37]/20 bg-black/40">Intellect<br><span class="text-3xl mt-2 block">Pending</span></div>
             </div>
-            <button onclick="location.reload()" class="mt-20 text-[10px] opacity-40 hover:opacity-100">RESET SYSTEM</button>
+            <button onclick="location.reload()" class="mt-24 text-[10px] opacity-30 hover:opacity-100 transition-all">TERMINATE SESSION</button>
         </div>
     </section>
 
     <div id="modal" class="fixed inset-0 z-[110] hidden flex-center bg-black/90 backdrop-blur-md px-6">
-        <div class="max-w-md w-full border border-[#D4AF37]/30 p-10 bg-[#0a0a0a] relative">
-            <h3 id="modal-title" class="text-xl tracking-widest mb-6">TITLE</h3>
-            <p id="modal-content" class="text-sm leading-loose opacity-70 font-sans"></p>
-            <button onclick="closePopup()" class="mt-10 text-[10px] border-b border-[#D4AF37] pb-1">CLOSE</button>
+        <div class="max-w-md w-full border border-[#D4AF37]/30 p-10 bg-[#0a0a0a] shadow-[0_0_50px_rgba(0,0,0,1)]">
+            <h3 id="modal-title" class="text-xl tracking-widest mb-6 border-b border-[#D4AF37]/20 pb-4 uppercase">TITLE</h3>
+            <p id="modal-content" class="text-sm leading-loose opacity-70 font-sans break-keep"></p>
+            <button onclick="closePopup()" class="mt-10 text-[10px] border border-[#D4AF37]/40 px-6 py-2 hover:bg-[#D4AF37]/10 transition-all">CLOSE</button>
         </div>
     </div>
 
     <script>
-        // 메뉴 토글
         function toggleMenu() {
             const menu = document.getElementById('side-menu');
             const b1 = document.getElementById('bar1');
             const b2 = document.getElementById('bar2');
             menu.classList.toggle('active');
-            // 아이콘 애니메이션 (= -> X)
-            b1.style.transform = menu.classList.contains('active') ? 'rotate(45deg) translateY(5px)' : 'none';
-            b2.style.transform = menu.classList.contains('active') ? 'rotate(-45deg) translateY(-5px)' : 'none';
+            b1.style.transform = menu.classList.contains('active') ? 'rotate(45deg) translateY(5.5px)' : 'none';
+            b2.style.transform = menu.classList.contains('active') ? 'rotate(-45deg) translateY(-5.5px)' : 'none';
         }
 
-        // 즉시 시스템 진입
         function enterSystem() {
             document.getElementById('intro-screen').classList.add('hidden');
             document.getElementById('analysis-screen').classList.remove('hidden');
             document.getElementById('analysis-screen').classList.add('flex');
         }
 
-        // 팝업 로직
         const info = {
-            mypage: { t: "MY PAGE", c: "로그인 후 개인 분석 리포트를 확인하실 수 있습니다." },
-            philosophy: { t: "PHILOSOPHY", c: "본 시스템은 직관과 통계를 결합하여 최상의 결론을 도출합니다." },
-            variables: { t: "VARIABLES", c: "T(기질), C(성격), I(지능) 세 가지 핵심 지표를 분석합니다." },
-            duty: { t: "DUTY", c: "제공된 정보의 최종 해석 책임은 사용자 본인에게 있습니다." }
+            mypage: { t: "MY PAGE", c: "로그인 시스템이 준비 중입니다. 개인화된 분석 리포트를 암호화하여 제공할 예정입니다." },
+            philosophy: { t: "PHILOSOPHY", c: "오염된 정보 환경에서 '라의 눈'처럼 진실을 꿰뚫는 직관적 필터링을 지향합니다." },
+            variables: { t: "VARIABLES", c: "T(기질), C(성격), I(지능)는 인간 판단의 핵심 상수입니다. 본 시스템은 이를 기반으로 데이터 왜곡을 제거합니다." },
+            duty: { t: "INFORMATION DUTY", c: "본 결과물은 알고리즘에 기반한 참고 자료이며, 최종적인 정보 선택의 권한과 책임은 사용자에게 있습니다." }
         };
 
         function openPopup(key) {
             document.getElementById('modal-title').innerText = info[key].t;
             document.getElementById('modal-content').innerText = info[key].c;
             document.getElementById('modal').classList.remove('hidden');
-            toggleMenu(); // 메뉴 닫기
+            if(document.getElementById('side-menu').classList.contains('active')) toggleMenu();
         }
 
-        function closePopup() {
-            document.getElementById('modal').classList.add('hidden');
-        }
+        function closePopup() { document.getElementById('modal').classList.add('hidden'); }
     </script>
 </body>
 </html>

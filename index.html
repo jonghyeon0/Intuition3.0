@@ -5,31 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INTUITION 3.0 | THE JUDGEMENT</title>
     <style>
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #050505; color: #fff; font-family: sans-serif; overflow: hidden; display: flex; justify-content: center; align-items: center; text-align: center; }
-        .container { z-index: 2; }
-        
-        /* 팀장님의 원본 이미지를 100% 그대로 노출 */
-        .ra-eye { 
-            width: 350px; 
-            height: 350px; 
-            margin: 0 auto; 
-            cursor: pointer; 
-            background-image: url('https://raw.githubusercontent.com/ilhacos/Intuition3.0/main/1768224413222.jpg');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.8)); 
-            transition: 0.5s; 
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background-color: #050505; color: #ffffff; 
+            font-family: 'Segoe UI', sans-serif; overflow: hidden; 
+            display: flex; justify-content: center; align-items: center; text-align: center; 
         }
-        .ra-eye:hover { transform: scale(1.03); filter: drop-shadow(0 0 60px rgba(212, 175, 55, 1)); }
 
-        h1 { font-size: 2.8rem; letter-spacing: 12px; font-weight: 300; margin-top: 20px; text-transform: uppercase; color: #d4af37; }
-        p { font-size: 1rem; letter-spacing: 5px; color: #888; margin-bottom: 60px; text-transform: uppercase; }
-        
-        .enter-btn { padding: 18px 60px; background: transparent; border: 1px solid #d4af37; color: #d4af37; text-transform: uppercase; letter-spacing: 4px; cursor: pointer; transition: 0.3s; font-weight: bold; }
+        /* 1. 배경 황금색 아우라 효과 유지 및 강화 */
+        .bg-glow { 
+            position: absolute; width: 700px; height: 700px; 
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, rgba(0,0,0,0) 70%); 
+            z-index: 1; 
+        }
+
+        .container { z-index: 2; }
+
+        /* 2. 라의 눈: 원본 이미지 100% 싱크로 복원 */
+        .ra-eye {
+            width: 320px; height: 320px; margin: 0 auto;
+            /* GitHub 절대 경로를 직접 타격하여 누락 방지 */
+         background-image: url('https://raw.githubusercontent.com/jonghyeon0/Intuition3.0/main/1768224413222.jpg');
+            background-size: contain; background-repeat: no-repeat; background-position: center;
+            filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.7));
+            transition: transform 0.5s ease, filter 0.5s ease;
+            cursor: pointer;
+        }
+
+        .ra-eye:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 45px rgba(212, 175, 55, 1));
+        }
+
+        /* 3. 황금색 타이포그래피 */
+        h1 {
+            font-size: 3rem; letter-spacing: 12px; font-weight: 300;
+            margin-top: 35px; color: #d4af37; text-transform: uppercase;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+
+        p {
+            font-size: 1.1rem; letter-spacing: 5px; color: #888;
+            margin-top: 10px; margin-bottom: 50px; text-transform: uppercase;
+        }
+
+        .enter-btn {
+            padding: 15px 50px; background: transparent;
+            border: 1px solid #d4af37; color: #d4af37;
+            text-transform: uppercase; letter-spacing: 4px;
+            cursor: pointer; transition: 0.3s; font-weight: bold;
+        }
+
         .enter-btn:hover { background: #d4af37; color: #000; }
-        
-        .bg-glow { position: absolute; width: 800px; height: 800px; background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%); z-index: 1; }
     </style>
 </head>
 <body>
@@ -38,7 +65,7 @@
         <div class="ra-eye"></div>
         <h1>INTUITION 3.0</h1>
         <p>THE JUDGEMENT OF T.C.I</p>
-        <button class="enter-btn" onclick="location.href='https://alhacos-os.com/analysis'">ENTER SYSTEM</button>
+        <button class="enter-btn">ENTER SYSTEM</button>
     </div>
 </body>
 </html>

@@ -399,11 +399,38 @@
 
 **이제 위치 헷갈릴 일 없지?** `</script>` 바로 위에 코드 박고 저장한 뒤, 웹사이트 새로고침해서 팝업 뜨는지 확인해라. 잘 작동하면 이제 제미나이 엔진에 **"실제 TCI 산출 텍스트"**를 어떻게 생성시킬지 그 무시무시한 프롬프트를 설계해 주겠다. 보고해라, 팀장! 위치 잡았나?
 
+// index.html <script> 내부에 추가
+window.onload = async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const stockCode = urlParams.get('code');
+    
+    if (stockCode) {
+        document.getElementById('analysis-section').style.display = 'block';
+        
+        try {
+            // 더미 데이터를 쏴주는 서버에 요청
+            const response = await fetch(`${SERVER_URL}/analyze/${stockCode}`);
+            const data = await response.json();
+            
+            // 화면의 금색 변수들에 데이터 매핑
+            document.getElementById('summary-text').innerText = data.insight;
+            document.querySelector('.total-score').innerText = data.total_score;
+            document.getElementById('t-process').innerText = data.process_t;
+            document.getElementById('c-process').innerText = data.process_c;
+            document.getElementById('i-process').innerText = data.process_i;
+            
+        } catch (e) {
+            console.error("데이터 수혈 실패, 시안 모드로 전환");
+        }
+    }
+};
+
 </script>
 </body>
 </html>
 
             
+
 
 
 

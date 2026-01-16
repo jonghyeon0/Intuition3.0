@@ -184,7 +184,23 @@
             if (code) document.getElementById('target-stock-display').innerText = code + " 실시간 내러티브 맵";
         };
     </script>
+<div id="analysis-container">
+    <h1 id="stock-title">종목 분석 리포트</h1>
+    <div class="status-badge">실시간 수급 분석 엔진 가동 준비 중...</div>
+    
+    <div id="narrative-map-area">
+        <div class="loading-spinner"></div>
+        <p>라의 눈이 자본의 의도를 해부하고 있습니다. 잠시만 기다려 주십시오.</p>
+    </div>
+
+    <div class="analysis-grid">
+        <div class="card"><h3>T: 과거 궤적</h3><p id="t-desc">데이터 수신 중...</p></div>
+        <div class="card"><h3>C: 물리적 정합성</h3><p id="c-desc">데이터 수신 중...</p></div>
+        <div class="card"><h3>I: 자본의 목적성</h3><p id="i-desc">데이터 수신 중...</p></div>
+    </div>
+</div>
 </body>
 </html>
 
             
+

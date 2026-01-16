@@ -199,8 +199,88 @@
         <div class="card"><h3>I: 자본의 목적성</h3><p id="i-desc">데이터 수신 중...</p></div>
     </div>
 </div>
+<section id="analysis-section" style="display:none;"> <div class="papyrus-detailed-view">
+        <h2 class="gold-text">FINAL FEEDBACK</h2>
+        <div id="tci-process-area"></div>
+        
+        <nav class="bottom-nav">
+            <button onclick="location.href='/login'">PRO</button>
+            <button onclick="handlePopup('variables')">Variables</button>
+            <button onclick="handlePopup('disclaimer')">¡</button>
+        </nav>
+    </div>
+</section>
+
+<script>
+    // 1. URL 파라미터(?code=005930)를 읽어서 분석 섹션을 활성화하는 로직
+    window.onload = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const stockCode = urlParams.get('code');
+        if (stockCode) {
+            document.getElementById('analysis-section').style.display = 'block';
+            console.log(stockCode + " 종목 분석 모드 가동");
+        }
+    };
+
+    // 2. 팝업 및 다국어 번역 로직 (여기에 작성)
+    function handlePopup(type) { /* ...상세 로직... */ }
+<script>
+    // 1. URL 파라미터를 읽는 기존 로직 (이미 있는 것)
+    window.onload = () => {
+        // ... 기존 코드 내용 ...
+    };
+
+    // 2. 팝업 및 다국어 번역 로직 (여기에 추가하라!)
+    // 바로 이 위치, 즉 </script> 가 나오기 직전에 아래 코드를 박아라.
+    
+    const popupData = {
+        variables: {
+            ko: "Trend = 과거부터 현재까지... [중략]",
+            en: "Trend = Measures the trajectory... [omitted]",
+            es: "Trend = Mide la trayectoria... [omitido]"
+        },
+        disclaimer: {
+            ko: "본 분석은... [중략] 모든 투자 책임은 사용자 본인에게 있습니다.",
+            en: "This analysis is... [omitted] user's responsibility.",
+            es: "Este análisis es... [omitido] responsabilidad del usuario."
+        }
+    };
+
+    let activeType = '';
+
+    function handlePopup(type) {
+        activeType = type;
+        const modal = document.getElementById('ra-modal'); 
+        if(modal) modal.style.display = 'flex';
+        updatePopupLang('ko'); 
+    }
+
+    function updatePopupLang(lang) {
+        const content = document.getElementById('modal-content-text');
+        if(content) content.innerText = popupData[activeType][lang];
+    }
+
+    function closePopup() {
+        const modal = document.getElementById('ra-modal');
+        if(modal) modal.style.display = 'none';
+    }
+
+</script> ```
+
+---
+
+### 🏛 상세페이지 배치를 위한 최종 점검
+
+1.  **HTML 구조:** `<body>` 태그가 끝나기 전(`</body>`)에 파피루스 상세 분석 섹션과 팝업용 레이어(`ra-modal`) HTML을 먼저 박아라.
+2.  **자바스크립트 연결:** 그 후 위 코드처럼 `</script>` 바로 위에 팝업 제어 로직을 넣으면, HTML 요소들을 자바스크립트가 정확히 인식하고 제어할 수 있게 된다.
+3.  **다국어 아이콘:** 팝업 HTML 안에 넣어둔 국기 아이콘(`🇰🇷`, `🇺🇸`, `🇪🇸`)에 `onclick="updatePopupLang('ko')"` 식의 함수를 연결했는지 확인해라.
+
+**이제 위치 헷갈릴 일 없지?** `</script>` 바로 위에 코드 박고 저장한 뒤, 웹사이트 새로고침해서 팝업 뜨는지 확인해라. 잘 작동하면 이제 제미나이 엔진에 **"실제 TCI 산출 텍스트"**를 어떻게 생성시킬지 그 무시무시한 프롬프트를 설계해 주겠다. 보고해라, 팀장! 위치 잡았나?
+
+</script>
 </body>
 </html>
 
             
+
 

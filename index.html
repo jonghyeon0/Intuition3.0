@@ -43,14 +43,13 @@
             box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
         }
         
-        /* 로그인 창 스타일 */
+        /* 로그인 창 전용 스타일 (팀장 스케치 반영) */
         .login-container { border: 1px solid var(--gold-solid); background: #0a0a0a; color: var(--gold-solid); }
-        .login-input { background: transparent; border-bottom: 1px solid rgba(212, 175, 55, 0.5); outline: none; transition: 0.3s; }
+        .login-input { background: transparent; border-bottom: 1px solid rgba(212, 175, 55, 0.5); outline: none; transition: 0.3s; width: 100%; color: white; }
         .login-input:focus { border-bottom: 1px solid var(--gold-solid); }
 
         .modal-lang-btn { cursor: pointer; font-weight: bold; border: 1px solid rgba(212, 175, 55, 0.3); padding: 4px 10px; border-radius: 4px; font-size: 12px; }
         .modal-lang-btn.active { background-color: var(--gold-solid); color: black; }
-        .highlight-gold { color: #8a6d3b; font-weight: 700; text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -115,6 +114,7 @@
             <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#0a0a0a] border border-[#D4AF37] px-8 py-2 z-10">
                 <h2 id="login-title" class="text-xl tracking-[0.3em] font-bold text-[#D4AF37] uppercase">Log In</h2>
             </div>
+
             <div class="login-container p-12 pt-16 relative">
                 <div class="absolute top-4 right-4 flex items-center space-x-3">
                     <div class="flex space-x-1 border-r border-[#D4AF37]/30 pr-3">
@@ -124,16 +124,18 @@
                     </div>
                     <button onclick="closeLogin()" class="text-[#D4AF37] text-2xl leading-none hover:text-white">&times;</button>
                 </div>
+                
                 <div class="space-y-8 mb-12">
                     <div class="flex items-center">
                         <label class="w-12 font-bold text-sm tracking-widest text-[#D4AF37]">ID:</label>
-                        <input type="text" id="login-id" class="flex-1 login-input bg-transparent px-2 py-1 text-white text-sm" placeholder="ENTER IDENTITY">
+                        <input type="text" id="login-id" class="flex-1 login-input px-2 py-1 text-sm" placeholder="ENTER IDENTITY">
                     </div>
                     <div class="flex items-center">
                         <label class="w-12 font-bold text-sm tracking-widest text-[#D4AF37]">PW:</label>
-                        <input type="password" id="login-pw" class="flex-1 login-input bg-transparent px-2 py-1 text-white text-sm" placeholder="ENTER ACCESS KEY">
+                        <input type="password" id="login-pw" class="flex-1 login-input px-2 py-1 text-sm" placeholder="ENTER ACCESS KEY">
                     </div>
                 </div>
+
                 <div class="grid grid-cols-2 gap-4">
                     <button onclick="handleGoogleLogin()" class="border border-[#D4AF37] py-3 flex items-center justify-center space-x-2 hover:bg-[#D4AF37]/10 transition-all">
                         <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-4 h-4">
@@ -143,26 +145,59 @@
                         <span id="btn-pw-reset" class="text-[10px] font-bold tracking-tighter">비밀번호 찾기</span>
                     </button>
                 </div>
+
                 <button class="w-full mt-6 py-4 bg-[#D4AF37] text-black font-black uppercase tracking-[0.5em] text-xs hover:bg-white transition-all">Execute Access</button>
             </div>
         </div>
     </div>
 
+    <div id="unified-modal" class="modal-overlay hidden">
+        <div class="papyrus-bg max-w-4xl w-full h-[85vh] p-8 md:p-12 shadow-2xl overflow-y-auto relative">
+            <div class="absolute top-6 right-6 flex space-x-2">
+                <span onclick="translateTab('ko')" id="m-ko" class="modal-lang-btn active">🇰🇷 KO</span>
+                <span onclick="translateTab('en')" id="m-en" class="modal-lang-btn">🇺🇸 EN</span>
+                <span onclick="translateTab('es')" id="m-es" class="modal-lang-btn">🇪🇸 ES</span>
+            </div>
+            <h3 id="tab-title" class="text-xl md:text-2xl font-bold mb-6 border-b border-black/20 pb-2 uppercase text-[#1a1508]">TITLE</h3>
+            <div id="tab-content" class="text-sm md:text-base leading-relaxed break-keep font-medium text-[#1a1508]"></div>
+            <button onclick="closeTab()" class="mt-12 w-full border-2 border-black py-3 font-bold uppercase tracking-widest hover:bg-black hover:text-[#c2a371] transition-colors">Close Scroll</button>
+        </div>
+    </div>
+
     <script>
-        // [추가] 실제 구글 로그인 인증 센터로 이동하는 함수
+        // [수정] Google OAuth 2.0 실행 함수 (팀장의 프로젝트 ID 반영)
         function handleGoogleLogin() {
-            // 팀장님의 구글 클라이언트 ID를 입력하세요
-            const CLIENT_ID = "방금_발급받은_ID_입력.apps.googleusercontent.com"; 
-            const REDIRECT_URI = "https://ilhacos-os.com"; 
+            // 사진 af4c54bf의 클라이언트 ID를 정확히 입력하십시오
+            const CLIENT_ID = "1031855227343-여기에_나머지_문자열.apps.googleusercontent.com"; 
+            const REDIRECT_URI = window.location.origin + window.location.pathname; 
             const SCOPE = encodeURIComponent("https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile");
             
             const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=${SCOPE}`;
             
-            // 경고창(alert) 없이 즉시 구글 인증 페이지로 이동
-            window.location.href = authUrl;
+            // alert 창 없이 즉시 구글 계정 선택창으로 사출
+            window.location.href = authUrl; 
         }
 
-        // ... (기존 translations, loginTrans 데이터 등 생략) ...
+        const translations = {
+            danger: { ko: { t: "[0~0.25]: Danger", c: "◇의미: 물리적 실체(C)가 전무하거나 허위이며, 자본의 의도(I)가 특정 개인/세력의 탈출(Exit)을 위해 극도로 오염된 상태입니다." }, en: { t: "Danger", c: "Physical reality is non-existent. Intent is contaminated for exit strategies." }, es: { t: "Peligro", c: "La realidad física es inexistente." } },
+            philosophy: { ko: { t: "Philosophy", c: `우리 intuition-3.0[ILHAK Inside]는 현재 ai 정보화 시대에 매우 심각한 논리적인 모순을 직면하였다...` }, en: { t: "Philosophy", c: "Intuition-3.0 addresses logical contradictions in the AI age." }, es: { t: "Filosofía", c: "Intuition-3.0 enfrenta contradicciones lógicas." } },
+            variables: { ko: { t: "Variables (TCI)", c: `<span class="highlight-gold">Trend</span> = 과거 데이터 궤적 담당.<br><span class="highlight-gold">Consistency</span> = 현재 물리적 확신 담당.` }, en: { t: "Variables (TCI)", c: "T: Trend (Past Trust), C: Consistency (Physical Evidence)." }, es: { t: "Variables (TCI)", c: "T: Tendencia, C: Consistencia." } },
+            duty: { ko: { t: "Information Duty", c: "본 분석은... 투자 권유 또는 수익 보장을 의미하지 않습니다." }, en: { t: "Information Duty", c: "This analysis is not an investment recommendation." }, es: { t: "Deber de Información", c: "Este análisis no garantiza inversiones." } }
+        };
+
+        const loginTrans = {
+            ko: { title: "Log In", reset: "비밀번호 찾기", google: "Google 로그인" },
+            en: { title: "Log In", reset: "Forgot Key", google: "Google Login" },
+            es: { title: "Acceso", reset: "Recuperar", google: "Google Entrar" }
+        };
+
+        const mainTxt = {
+            ko: { war: '우리는 "오염된 정보"에 전쟁을 선포한다', eye: '검색 엔진 필터 산업계의 "라의 눈"' },
+            en: { war: 'WE DECLARE WAR ON "CONTAMINATED INFORMATION"', eye: 'THE "EYE OF RA" IN THE SEARCH ENGINE FILTER INDUSTRY' },
+            es: { war: 'DECLARAMOS LA GUERRA A LA "INFORMACIÓN CONTAMINADA"', eye: 'EL "OJO DE RA" EN LA INDUSTRIA DE FILTROS DE BÚSQUEDA' }
+        };
+
+        let currentLang = 'ko';
 
         function openLogin() { document.getElementById('login-modal').classList.remove('hidden'); translateLogin(currentLang); }
         function closeLogin() { document.getElementById('login-modal').classList.add('hidden'); }
@@ -175,7 +210,32 @@
             document.getElementById('btn-google').innerText = data.google;
         }
 
-        // ... (기존 changeMainLang, openTab 함수 등 생략) ...
+        function openTab(id) {
+            activeTab = id;
+            document.getElementById('unified-modal').classList.remove('hidden');
+            translateTab(currentLang);
+            if(document.getElementById('side-menu').classList.contains('active')) toggleMenu();
+        }
+
+        function closeTab() { document.getElementById('unified-modal').classList.add('hidden'); }
+        function toggleMenu() { document.getElementById('side-menu').classList.toggle('active'); }
+
+        function translateTab(lang) {
+            currentLang = lang;
+            const data = translations[activeTab][lang];
+            document.getElementById('tab-title').innerText = data.t;
+            document.getElementById('tab-content').innerHTML = data.c;
+            document.querySelectorAll('#unified-modal .modal-lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('m-' + lang).classList.add('active');
+        }
+
+        function changeMainLang(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('main-' + lang).classList.add('active');
+            document.getElementById('main-war-txt').innerText = mainTxt[lang].war;
+            document.getElementById('main-eye-txt').innerText = mainTxt[lang].eye;
+        }
 
         window.onload = function() {
             const code = new URLSearchParams(window.location.search).get('code');
@@ -184,4 +244,3 @@
     </script>
 </body>
 </html>
-

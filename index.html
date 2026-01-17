@@ -1,9 +1,10 @@
-   <!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INTUITION 3.0 | SYSTEM CORE</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;700&display=swap');
@@ -43,13 +44,16 @@
             box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
         }
         
-        /* 로그인 창 전용 스타일 (팀장 스케치 반영) */
+        /* 로그인 창 전용 스타일 */
         .login-container { border: 1px solid var(--gold-solid); background: #0a0a0a; color: var(--gold-solid); }
         .login-input { background: transparent; border-bottom: 1px solid rgba(212, 175, 55, 0.5); outline: none; transition: 0.3s; width: 100%; color: white; }
         .login-input:focus { border-bottom: 1px solid var(--gold-solid); }
 
         .modal-lang-btn { cursor: pointer; font-weight: bold; border: 1px solid rgba(212, 175, 55, 0.3); padding: 4px 10px; border-radius: 4px; font-size: 12px; }
         .modal-lang-btn.active { background-color: var(--gold-solid); color: black; }
+        
+        /* [추가] 구글 버튼 커스텀 위치 */
+        #google_btn { display: flex; justify-content: center; margin-bottom: 1.5rem; }
     </style>
 </head>
 <body>
@@ -125,7 +129,7 @@
                     <button onclick="closeLogin()" class="text-[#D4AF37] text-2xl leading-none hover:text-white">&times;</button>
                 </div>
                 
-                <div class="space-y-8 mb-12">
+                <div class="space-y-8 mb-10">
                     <div class="flex items-center">
                         <label class="w-12 font-bold text-sm tracking-widest text-[#D4AF37]">ID:</label>
                         <input type="text" id="login-id" class="flex-1 login-input px-2 py-1 text-sm" placeholder="ENTER IDENTITY">
@@ -135,6 +139,8 @@
                         <input type="password" id="login-pw" class="flex-1 login-input px-2 py-1 text-sm" placeholder="ENTER ACCESS KEY">
                     </div>
                 </div>
+
+                <div id="google_btn"></div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <button onclick="handleGoogleLogin()" class="border border-[#D4AF37] py-3 flex items-center justify-center space-x-2 hover:bg-[#D4AF37]/10 transition-all">
@@ -165,19 +171,77 @@
     </div>
 
     <script>
-        // [수정] Google OAuth 2.0 실행 함수 (팀장의 프로젝트 ID 반영)
-        function handleGoogleLogin() {
-            // 사진 af4c54bf의 클라이언트 ID를 정확히 입력하십시오
-            const CLIENT_ID = "1031855227343-여기에_나머지_문자열.apps.googleusercontent.com"; 
-            const REDIRECT_URI = window.location.origin + window.location.pathname; 
-            const SCOPE = encodeURIComponent("https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile");
-            
-            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=${SCOPE}`;
-            
-            // alert 창 없이 즉시 구글 계정 선택창으로 사출
-            window.location.href = authUrl; 
+        /**
+         * [핵심] 구글 로그인 설정 및 초기화
+         */
+        window.onload = function () {
+            // 프로젝트 번호와 연결된 클라이언트 ID
+            const CLIENT_ID = "1031855227343-1mjtf15p7bu7r1850kdbau002bvd2ue1.apps.googleusercontent.com";
+
+            // 구글 서비스 초기화
+            google.accounts.id.initialize({
+                client_id: CLIENT_ID,
+                callback: handleCredentialResponse, // 로그인 성공 시 실행될 함수
+                auto_select: false, // 자동 로그인 해제
+                context: "signin"
+            });
+
+            // 화면에 구글 로그인 버튼을 자동으로 생성합니다.
+            google.accounts.id.renderButton(
+                document.getElementById("google_btn"), 
+                { theme: "outline", size: "large", width: 320 } 
+            );
+
+            // 원탭 로그인 프롬프트 표시
+            google.accounts.id.prompt();
+
+            // 기존 로직: URL 파라미터 체크
+            const code = new URLSearchParams(window.location.search).get('code');
+            if (code) document.getElementById('target-stock-display').innerText = code + " 실시간 분석";
+        };
+
+        /**
+         * [보안] 로그인 성공 후 사용자 정보를 처리하는 함수
+         */
+        function handleCredentialResponse(response) {
+            // 구글이 보내준 암호화된 사용자 정보(JWT) 해석
+            const responsePayload = parseJwt(response.credential);
+
+            console.log("ID: " + responsePayload.sub);
+            console.log('Full Name: ' + responsePayload.name);
+            console.log('Email: ' + responsePayload.email);
+
+            // [시스템 적용] 메인 화면에 환영 메시지와 이름을 띄웁니다.
+            const displayArea = document.getElementById('target-stock-display');
+            if (displayArea) {
+                displayArea.innerText = `${responsePayload.name} 팀장님, 환영합니다.`;
+            }
+
+            alert(`${responsePayload.name}님, Intuition 3.0 시스템 접속이 승인되었습니다.`);
+            closeLogin();
         }
 
+        /**
+         * [도구] 암호화된 구글 데이터를 읽기 가능한 형태로 변환
+         */
+        function parseJwt (token) {
+            var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+
+            return JSON.parse(jsonPayload);
+        }
+
+        /**
+         * [통합] 기존 버튼 클릭 시에도 프롬프트가 뜨도록 연결
+         */
+        function handleGoogleLogin() {
+            google.accounts.id.prompt();
+        }
+
+        // --- 기존 UI 제어 스크립트 ---
         const translations = {
             danger: { ko: { t: "[0~0.25]: Danger", c: "◇의미: 물리적 실체(C)가 전무하거나 허위이며, 자본의 의도(I)가 특정 개인/세력의 탈출(Exit)을 위해 극도로 오염된 상태입니다." }, en: { t: "Danger", c: "Physical reality is non-existent. Intent is contaminated for exit strategies." }, es: { t: "Peligro", c: "La realidad física es inexistente." } },
             philosophy: { ko: { t: "Philosophy", c: `우리 intuition-3.0[ILHAK Inside]는 현재 ai 정보화 시대에 매우 심각한 논리적인 모순을 직면하였다...` }, en: { t: "Philosophy", c: "Intuition-3.0 addresses logical contradictions in the AI age." }, es: { t: "Filosofía", c: "Intuition-3.0 enfrenta contradicciones lógicas." } },
@@ -198,6 +262,7 @@
         };
 
         let currentLang = 'ko';
+        let activeTab = '';
 
         function openLogin() { document.getElementById('login-modal').classList.remove('hidden'); translateLogin(currentLang); }
         function closeLogin() { document.getElementById('login-modal').classList.add('hidden'); }
@@ -236,11 +301,6 @@
             document.getElementById('main-war-txt').innerText = mainTxt[lang].war;
             document.getElementById('main-eye-txt').innerText = mainTxt[lang].eye;
         }
-
-        window.onload = function() {
-            const code = new URLSearchParams(window.location.search).get('code');
-            if (code) document.getElementById('target-stock-display').innerText = code + " 실시간 분석";
-        };
     </script>
 </body>
 </html>

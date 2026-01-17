@@ -1,246 +1,246 @@
-    <!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INTUITION 3.0 | SYSTEM CORE</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;700&display=swap');
-        
-        :root {
-            --gold-primary: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
-            --gold-solid: #D4AF37;
-            --egypt-blue: #1a2a6c;
-            --papyrus-bg: #f2e3bc;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INTUITION 3.0 | SYSTEM CORE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;700&display=swap');
+        
+        :root {
+            --gold-primary: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            --gold-solid: #D4AF37;
+            --egypt-blue: #1a2a6c;
+            --papyrus-bg: #f2e3bc;
+        }
 
-        body { background-color: #000; color: var(--gold-solid); font-family: 'Cinzel', serif; margin: 0; overflow-x: hidden; }
-        .hidden { display: none !important; }
-        
-        /* TCI 아이콘 레이아웃 */
-        .status-box { flex: 1; max-width: 100px; text-align: center; cursor: pointer; transition: transform 0.3s; z-index: 50; }
-        .status-box:hover { transform: translateY(-5px); }
-        .icon-circle { 
-            width: 100%; aspect-ratio: 1/1; border-radius: 50%; border: 1px solid rgba(212, 175, 55, 0.3);
-            display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 0.5rem;
-            background-color: #050505;
-        }
-        .icon-circle img { width: 100%; height: 100%; object-fit: cover; }
-        
-        /* 인터페이스 제어 */
-        .lang-btn { cursor: pointer; opacity: 0.5; transition: 0.3s; padding: 2px 6px; }
-        .lang-btn.active { opacity: 1; border-bottom: 2px solid var(--gold-solid); }
+        body { background-color: #000; color: var(--gold-solid); font-family: 'Cinzel', serif; margin: 0; overflow-x: hidden; }
+        .hidden { display: none !important; }
+        
+        /* TCI 아이콘 레이아웃 */
+        .status-box { flex: 1; max-width: 100px; text-align: center; cursor: pointer; transition: transform 0.3s; z-index: 50; }
+        .status-box:hover { transform: translateY(-5px); }
+        .icon-circle { 
+            width: 100%; aspect-ratio: 1/1; border-radius: 50%; border: 1px solid rgba(212, 175, 55, 0.3);
+            display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 0.5rem;
+            background-color: #050505;
+        }
+        .icon-circle img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* 인터페이스 제어 */
+        .lang-btn { cursor: pointer; opacity: 0.5; transition: 0.3s; padding: 2px 6px; }
+        .lang-btn.active { opacity: 1; border-bottom: 2px solid var(--gold-solid); }
 
-        #side-menu { transition: transform 0.5s ease; transform: translateY(-100%); z-index: 150; position: fixed; inset: 0; background: black; }
-        #side-menu.active { transform: translateY(0); }
+        #side-menu { transition: transform 0.5s ease; transform: translateY(-100%); z-index: 150; position: fixed; inset: 0; background: black; }
+        #side-menu.active { transform: translateY(0); }
 
-        /* 모달 공통 */
-        .modal-overlay { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.9); }
-        .papyrus-bg { 
-            background-color: #c2a371; background-image: url('https://www.transparenttextures.com/patterns/papyros.png'); 
-            color: #1a1508; font-family: 'Noto Sans KR', sans-serif; border-left: 12px solid #3e2b1c; border-right: 12px solid #3e2b1c;
-            box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
-        }
-        
-        /* 로그인 창 스타일 */
-        .login-container { border: 1px solid var(--gold-solid); background: #0a0a0a; color: var(--gold-solid); }
-        .login-input { background: transparent; border-bottom: 1px solid rgba(212, 175, 55, 0.5); outline: none; transition: 0.3s; }
-        .login-input:focus { border-bottom: 1px solid var(--gold-solid); }
+        /* 모달 공통 */
+        .modal-overlay { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.9); }
+        .papyrus-bg { 
+            background-color: #c2a371; background-image: url('https://www.transparenttextures.com/patterns/papyros.png'); 
+            color: #1a1508; font-family: 'Noto Sans KR', sans-serif; border-left: 12px solid #3e2b1c; border-right: 12px solid #3e2b1c;
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
+        }
+        
+        /* 로그인 창 스타일 */
+        .login-container { border: 1px solid var(--gold-solid); background: #0a0a0a; color: var(--gold-solid); }
+        .login-input { background: transparent; border-bottom: 1px solid rgba(212, 175, 55, 0.5); outline: none; transition: 0.3s; }
+        .login-input:focus { border-bottom: 1px solid var(--gold-solid); }
 
-        .modal-lang-btn { cursor: pointer; font-weight: bold; border: 1px solid rgba(212, 175, 55, 0.3); padding: 4px 10px; border-radius: 4px; font-size: 12px; }
-        .modal-lang-btn.active { background-color: var(--gold-solid); color: black; }
-        .highlight-gold { color: #8a6d3b; font-weight: 700; text-decoration: underline; }
-    </style>
+        .modal-lang-btn { cursor: pointer; font-weight: bold; border: 1px solid rgba(212, 175, 55, 0.3); padding: 4px 10px; border-radius: 4px; font-size: 12px; }
+        .modal-lang-btn.active { background-color: var(--gold-solid); color: black; }
+        .highlight-gold { color: #8a6d3b; font-weight: 700; text-decoration: underline; }
+    </style>
 </head>
 <body>
 
-    <header class="fixed top-0 left-0 w-full p-6 flex justify-end items-center z-[200] space-x-6">
-        <div class="flex space-x-3 text-xs tracking-widest border-r border-[#D4AF37]/30 pr-6">
-            <span onclick="changeMainLang('ko')" id="main-ko" class="lang-btn active">KO</span>
-            <span onclick="changeMainLang('en')" id="main-en" class="lang-btn">EN</span>
-            <span onclick="changeMainLang('es')" id="main-es" class="lang-btn">ES</span>
-        </div>
-        <button onclick="toggleMenu()" class="group space-y-2 p-2 focus:outline-none">
-            <div id="bar1" class="w-8 h-[1px] bg-[#D4AF37] transition-all"></div>
-            <div id="bar2" class="w-8 h-[1px] bg-[#D4AF37] transition-all"></div>
-        </button>
-    </header>
+    <header class="fixed top-0 left-0 w-full p-6 flex justify-end items-center z-[200] space-x-6">
+        <div class="flex space-x-3 text-xs tracking-widest border-r border-[#D4AF37]/30 pr-6">
+            <span onclick="changeMainLang('ko')" id="main-ko" class="lang-btn active">KO</span>
+            <span onclick="changeMainLang('en')" id="main-en" class="lang-btn">EN</span>
+            <span onclick="changeMainLang('es')" id="main-es" class="lang-btn">ES</span>
+        </div>
+        <button onclick="toggleMenu()" class="group space-y-2 p-2 focus:outline-none">
+            <div id="bar1" class="w-8 h-[1px] bg-[#D4AF37] transition-all"></div>
+            <div id="bar2" class="w-8 h-[1px] bg-[#D4AF37] transition-all"></div>
+        </button>
+    </header>
 
-    <main class="min-h-screen flex flex-col items-center justify-center pt-20">
-        <div id="target-stock-display" class="text-[#D4AF37] mb-8 tracking-[0.3em] text-sm font-bold uppercase">READY TO ANALYZE</div>
+    <main class="min-h-screen flex flex-col items-center justify-center pt-20">
+        <div id="target-stock-display" class="text-[#D4AF37] mb-8 tracking-[0.3em] text-sm font-bold uppercase">READY TO ANALYZE</div>
 
-        <div class="flex justify-center gap-4 md:gap-8 w-full max-w-md mb-12 px-4 relative z-50">
-            <div onclick="openTab('danger')" class="status-box">
-                <div class="icon-circle"><img src="1768478515365.jpg"></div>
-                <p class="text-[10px] font-bold text-red-500 uppercase">Danger</p>
-            </div>
-            <div onclick="openTab('warning')" class="status-box">
-                <div class="icon-circle"><img src="1768478520039.jpg"></div>
-                <p class="text-[10px] font-bold text-orange-500 uppercase">Warning</p>
-            </div>
-            <div onclick="openTab('safe')" class="status-box">
-                <div class="icon-circle"><img src="1768478522258.jpg"></div>
-                <p class="text-[10px] font-bold text-green-500 uppercase">Safe</p>
-            </div>
-            <div onclick="openTab('deep')" class="status-box">
-                <div class="icon-circle"><img src="1768478524524.jpg"></div>
-                <p class="text-[10px] font-bold text-blue-500 uppercase">Deep Truth</p>
-            </div>
-        </div>
+        <div class="flex justify-center gap-4 md:gap-8 w-full max-w-md mb-12 px-4 relative z-50">
+            <div onclick="openTab('danger')" class="status-box">
+                <div class="icon-circle"><img src="1768478515365.jpg"></div>
+                <p class="text-[10px] font-bold text-red-500 uppercase">Danger</p>
+            </div>
+            <div onclick="openTab('warning')" class="status-box">
+                <div class="icon-circle"><img src="1768478520039.jpg"></div>
+                <p class="text-[10px] font-bold text-orange-500 uppercase">Warning</p>
+            </div>
+            <div onclick="openTab('safe')" class="status-box">
+                <div class="icon-circle"><img src="1768478522258.jpg"></div>
+                <p class="text-[10px] font-bold text-green-500 uppercase">Safe</p>
+            </div>
+            <div onclick="openTab('deep')" class="status-box">
+                <div class="icon-circle"><img src="1768478524524.jpg"></div>
+                <p class="text-[10px] font-bold text-blue-500 uppercase">Deep Truth</p>
+            </div>
+        </div>
 
-        <div class="text-center mb-10 px-6">
-            <h2 id="main-war-txt" class="text-lg md:text-2xl tracking-[0.2em] font-light leading-tight mb-2 uppercase">우리는 "오염된 정보"에 전쟁을 선포한다</h2>
-            <p id="main-eye-txt" class="text-sm md:text-lg tracking-[0.3em] font-light italic uppercase">검색 엔진 필터 산업계의 "라의 눈"</p>
-        </div>
+        <div class="text-center mb-10 px-6">
+            <h2 id="main-war-txt" class="text-lg md:text-2xl tracking-[0.2em] font-light leading-tight mb-2 uppercase">우리는 "오염된 정보"에 전쟁을 선포한다</h2>
+            <p id="main-eye-txt" class="text-sm md:text-lg tracking-[0.3em] font-light italic uppercase">검색 엔진 필터 산업계의 "라의 눈"</p>
+        </div>
 
-        <img src="long.png" class="w-56 h-56 md:w-64 md:h-64 object-contain mb-10">
+        <img src="long.png" class="w-56 h-56 md:w-64 md:h-64 object-contain mb-10">
 
-        <div class="text-center">
-            <h1 class="text-4xl md:text-6xl tracking-[0.4em] font-light mb-4">INTUITION 3.0</h1>
-            <p class="text-sm tracking-[0.6em] mb-12 uppercase italic font-bold">The Judgement of T.C.I</p>
-            <button onclick="openLogin()" class="px-16 py-4 border border-[#D4AF37] hover:bg-[#D4AF37]/10 tracking-[0.4em] text-xs font-bold uppercase transition-all">Enter System</button>
-        </div>
-    </main>
+        <div class="text-center">
+            <h1 class="text-4xl md:text-6xl tracking-[0.4em] font-light mb-4">INTUITION 3.0</h1>
+            <p class="text-sm tracking-[0.6em] mb-12 uppercase italic font-bold">The Judgement of T.C.I</p>
+            <button onclick="openLogin()" class="px-16 py-4 border border-[#D4AF37] hover:bg-[#D4AF37]/10 tracking-[0.4em] text-xs font-bold uppercase transition-all">Enter System</button>
+        </div>
+    </main>
 
-    <div id="side-menu" class="flex flex-col pt-32 px-12 space-y-8 text-2xl font-light">
-        <button onclick="openTab('philosophy')" class="text-left uppercase">Philosophy</button>
-        <button onclick="openTab('variables')" class="text-left uppercase">Variables (TCI)</button>
-        <button onclick="openTab('duty')" class="text-left uppercase">Information Duty</button>
-        <button onclick="toggleMenu()" class="mt-20 text-sm border-b border-[#D4AF37] pb-1 uppercase">Back to main page</button>
-    </div>
+    <div id="side-menu" class="flex flex-col pt-32 px-12 space-y-8 text-2xl font-light">
+        <button onclick="openTab('philosophy')" class="text-left uppercase">Philosophy</button>
+        <button onclick="openTab('variables')" class="text-left uppercase">Variables (TCI)</button>
+        <button onclick="openTab('duty')" class="text-left uppercase">Information Duty</button>
+        <button onclick="toggleMenu()" class="mt-20 text-sm border-b border-[#D4AF37] pb-1 uppercase">Back to main page</button>
+    </div>
 
-    <div id="login-modal" class="modal-overlay hidden">
-        <div class="relative w-full max-w-md mx-4">
-            <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#0a0a0a] border border-[#D4AF37] px-8 py-2 z-10">
-                <h2 id="login-title" class="text-xl tracking-[0.3em] font-bold text-[#D4AF37] uppercase">Log In</h2>
-            </div>
-            <div class="login-container p-12 pt-16 relative">
-                <div class="absolute top-4 right-4 flex items-center space-x-3">
-                    <div class="flex space-x-1 border-r border-[#D4AF37]/30 pr-3">
-                        <span onclick="translateLogin('ko')" class="modal-lang-btn text-[10px] cursor-pointer hover:text-white">KO</span>
-                        <span onclick="translateLogin('en')" class="modal-lang-btn text-[10px] cursor-pointer hover:text-white">EN</span>
-                        <span onclick="translateLogin('es')" class="modal-lang-btn text-[10px] cursor-pointer hover:text-white">ES</span>
-                    </div>
-                    <button onclick="closeLogin()" class="text-[#D4AF37] text-2xl leading-none hover:text-white">&times;</button>
-                </div>
-                <div class="space-y-8 mb-12">
-                    <div class="flex items-center">
-                        <label class="w-12 font-bold text-sm tracking-widest text-[#D4AF37]">ID:</label>
-                        <input type="text" id="login-id" class="flex-1 login-input bg-transparent px-2 py-1 text-white text-sm" placeholder="ENTER IDENTITY">
-                    </div>
-                    <div class="flex items-center">
-                        <label class="w-12 font-bold text-sm tracking-widest text-[#D4AF37]">PW:</label>
-                        <input type="password" id="login-pw" class="flex-1 login-input bg-transparent px-2 py-1 text-white text-sm" placeholder="ENTER ACCESS KEY">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <button onclick="alert('Google Auth')" class="border border-[#D4AF37] py-3 flex items-center justify-center space-x-2 hover:bg-[#D4AF37]/10 transition-all">
-                        <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-4 h-4">
-                        <span id="btn-google" class="text-[10px] font-bold tracking-tighter">Google 로그인</span>
-                    </button>
-                    <button onclick="alert('Key Recovery')" class="border border-[#D4AF37] py-3 flex items-center justify-center hover:bg-[#D4AF37]/10 transition-all">
-                        <span id="btn-pw-reset" class="text-[10px] font-bold tracking-tighter">비밀번호 찾기</span>
-                    </button>
-                </div>
-                <button class="w-full mt-6 py-4 bg-[#D4AF37] text-black font-black uppercase tracking-[0.5em] text-xs hover:bg-white transition-all">Execute Access</button>
-            </div>
-        </div>
-    </div>
+    <div id="login-modal" class="modal-overlay hidden">
+        <div class="relative w-full max-w-md mx-4">
+            <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#0a0a0a] border border-[#D4AF37] px-8 py-2 z-10">
+                <h2 id="login-title" class="text-xl tracking-[0.3em] font-bold text-[#D4AF37] uppercase">Log In</h2>
+            </div>
+            <div class="login-container p-12 pt-16 relative">
+                <div class="absolute top-4 right-4 flex items-center space-x-3">
+                    <div class="flex space-x-1 border-r border-[#D4AF37]/30 pr-3">
+                        <span onclick="translateLogin('ko')" class="modal-lang-btn text-[10px] cursor-pointer hover:text-white">KO</span>
+                        <span onclick="translateLogin('en')" class="modal-lang-btn text-[10px] cursor-pointer hover:text-white">EN</span>
+                        <span onclick="translateLogin('es')" class="modal-lang-btn text-[10px] cursor-pointer hover:text-white">ES</span>
+                    </div>
+                    <button onclick="closeLogin()" class="text-[#D4AF37] text-2xl leading-none hover:text-white">&times;</button>
+                </div>
+                <div class="space-y-8 mb-12">
+                    <div class="flex items-center">
+                        <label class="w-12 font-bold text-sm tracking-widest text-[#D4AF37]">ID:</label>
+                        <input type="text" id="login-id" class="flex-1 login-input bg-transparent px-2 py-1 text-white text-sm" placeholder="ENTER IDENTITY">
+                    </div>
+                    <div class="flex items-center">
+                        <label class="w-12 font-bold text-sm tracking-widest text-[#D4AF37]">PW:</label>
+                        <input type="password" id="login-pw" class="flex-1 login-input bg-transparent px-2 py-1 text-white text-sm" placeholder="ENTER ACCESS KEY">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <button onclick="alert('Google Auth')" class="border border-[#D4AF37] py-3 flex items-center justify-center space-x-2 hover:bg-[#D4AF37]/10 transition-all">
+                        <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-4 h-4">
+                        <span id="btn-google" class="text-[10px] font-bold tracking-tighter">Google 로그인</span>
+                    </button>
+                    <button onclick="alert('Key Recovery')" class="border border-[#D4AF37] py-3 flex items-center justify-center hover:bg-[#D4AF37]/10 transition-all">
+                        <span id="btn-pw-reset" class="text-[10px] font-bold tracking-tighter">비밀번호 찾기</span>
+                    </button>
+                </div>
+                <button class="w-full mt-6 py-4 bg-[#D4AF37] text-black font-black uppercase tracking-[0.5em] text-xs hover:bg-white transition-all">Execute Access</button>
+            </div>
+        </div>
+    </div>
 
-    <div id="unified-modal" class="modal-overlay hidden">
-        <div class="papyrus-bg max-w-4xl w-full h-[85vh] p-8 md:p-12 shadow-2xl overflow-y-auto relative">
-            <div class="absolute top-6 right-6 flex space-x-2">
-                <span onclick="translateTab('ko')" id="m-ko" class="modal-lang-btn active">🇰🇷 KO</span>
-                <span onclick="translateTab('en')" id="m-en" class="modal-lang-btn">🇺🇸 EN</span>
-                <span onclick="translateTab('es')" id="m-es" class="modal-lang-btn">🇪🇸 ES</span>
-            </div>
-            <h3 id="tab-title" class="text-xl md:text-2xl font-bold mb-6 border-b border-black/20 pb-2 uppercase text-[#1a1508]">TITLE</h3>
-            <div id="tab-content" class="text-sm md:text-base leading-relaxed break-keep font-medium text-[#1a1508]"></div>
-            <button onclick="closeTab()" class="mt-12 w-full border-2 border-black py-3 font-bold uppercase tracking-widest hover:bg-black hover:text-[#c2a371] transition-colors">Close Scroll</button>
-        </div>
-    </div>
+    <div id="unified-modal" class="modal-overlay hidden">
+        <div class="papyrus-bg max-w-4xl w-full h-[85vh] p-8 md:p-12 shadow-2xl overflow-y-auto relative">
+            <div class="absolute top-6 right-6 flex space-x-2">
+                <span onclick="translateTab('ko')" id="m-ko" class="modal-lang-btn active">🇰🇷 KO</span>
+                <span onclick="translateTab('en')" id="m-en" class="modal-lang-btn">🇺🇸 EN</span>
+                <span onclick="translateTab('es')" id="m-es" class="modal-lang-btn">🇪🇸 ES</span>
+            </div>
+            <h3 id="tab-title" class="text-xl md:text-2xl font-bold mb-6 border-b border-black/20 pb-2 uppercase text-[#1a1508]">TITLE</h3>
+            <div id="tab-content" class="text-sm md:text-base leading-relaxed break-keep font-medium text-[#1a1508]"></div>
+            <button onclick="closeTab()" class="mt-12 w-full border-2 border-black py-3 font-bold uppercase tracking-widest hover:bg-black hover:text-[#c2a371] transition-colors">Close Scroll</button>
+        </div>
+    </div>
 
-    <script>
-        const translations = {
-            danger: { ko: { t: "[0~0.25]: Danger", c: "◇의미: 물리적 실체(C)가 전무하거나 허위이며, 자본의 의도(I)가 특정 개인/세력의 탈출(Exit)을 위해 극도로 오염된 상태입니다.<br>◇조언: 즉각적인 정보 차단을 추천드립니다. 이 정보를 믿는 것은 도박이 아닌 자살행위입니다." }, en: { t: "Danger", c: "Physical reality is non-existent. Intent is contaminated for exit strategies. Immediate blocking recommended." }, es: { t: "Peligro", c: "La realidad física es inexistente. Se recomienda el bloqueo inmediato." } },
-            warning: { ko: { t: "[0.25~0.5]: Warning", c: "◇의미: 과거의 추세(T)는 존재하나, 현재 보도된 논리(C)에 심각한 결함이 있거나 정보 시차가 맞지 않는 상태입니다.<br>◇조언: 비판적 읽기를 추천드립니다. 증거 수집 시까지 결정을 유보하십시오." }, en: { t: "Warning", c: "Past trends exist but current logic is flawed. Critical reading recommended." }, es: { t: "Advertencia", c: "Existen tendencias pasadas pero la lógica es defectuosa." } },
-            safe: { ko: { t: "[0.5~0.75]: Safe", c: "◇의미: 추세(T)와 현재 실체(C)가 일치하기 시작했으며, 의도(I) 또한 시장의 보편적인 상식과 부합하는 상태입니다.<br>◇조언: 검증된 성장의 궤적을 의미합니다. 신뢰의 관성이 붙기 시작한 시점입니다." }, en: { t: "Safe", c: "Trends and reality align. Trust inertia is building." }, es: { t: "Seguro", c: "La tendencia y la realidad coinciden." } },
-            deep: { ko: { t: "[0.75~1.0]: Deep Truth", c: "◇의미: 본질적 실체의 최고의 경지입니다. 추세(T), 실체(C), 의도(I)가 완벽한 삼위일체를 이루어 시간이 흐를수록 가치가 증명되는 정보입니다.<br>◇조언: 강력한 확신을 가져도 좋은 구간입니다." }, en: { t: "Deep Truth", c: "Highest state of reality. Perfect trinity of T, C, and I." }, es: { t: "Verdad Profunda", c: "El estado más alto de la realidad esencial." } },
-            philosophy: {
-                ko: { t: "Philosophy", c: `우리 intuition-3.0[ILHAK Inside]는 현재 ai 정보화 시대에 매우 심각한 논리적인 모순을 직면하였다. 사람들은 더 이상 검색을 스스로 하지 않는다. 정보의 범람으로 정보의 피로도가 매우 높다. 숏품의 영향으로 정보의 비판적 사고 능력이 점점 약해지고있다. 이 모든 상황 속에서 이해관계가 내재된 정보, ai 환각(hallucination)문제로 사람들의 진실된 판단을 저해하고 있다는 것이였다. 그 중 특히 많은 사람들의 생명 같은 돈을 다루는 경제의 영역에서 이 문제가 특히 심각하다는 사실을 깨달았다. 그래서 "시장의 신뢰는 고정된 값이 아니라 누적된 팩트와 변화하는 의도의 종합이다, 시간=돈"라는 철학을 기술로 구현하고자 하였다. 현재 지금 모델에서의 주요 고객층은 금융업 종사자, 개인 투자자, 금융기관을 대상으로 하고 있다. 인간의 모든 판단의 과정이 입력-->이해-->판단을 거치는데 입력차원에서 오염된 데이터를 검증하고 신뢰도 점수와 구간을 통해 지금 분석하고 있는 매체의 비판적 이해도를 초효율적으로 높인뒤에 투자자들로 하여금 본인이 가지고 있는 시장 분석툴을 더 발전하는데 시간을 효율적으로 썼으면 하는 바람에 만든 "판단 보조 모듈"이다. 기존의 필터링을 통해 정보의 투명성을 높이는 기업들이 있었지만 그들은 언어적 모순이나 팩트를 보여주는데에 그쳤다. 하지만 우리는 다르다. TCI기법을 통해 팩트인 정보의 맥락, 의도까지 비판적으로 파해친다. T(trend)는 과거의 신뢰 관성을 담고 C(consistency)현재의 물리적 확신을 담고 I(intention)미래의 리스크 필터를 담는다.<br><br>그리고 이러한 변수들을 바탕으로 내러티브 맵을 제공할것이다.<br><br>마지막으로 우리는 지금 기업정보에 대해서만 이 기술을 쓰고 있지만 이 시장에서 독점적인 지위를 가진 후에 현금성 자산, 가상 디지털 자산, 실물성 자산(예: 부동산)의 영역까지 시장 점유율을 높인뒤에 전세계 모든 디지털 경제지는 우리 intuition의 검증을 받은 "올바른"정보로 구성이 될것이다. 즉, 기존의 우리가 권위라고 불렀던 허상을 진실된 기준에 의해 낱낱이 파괴하고 올바른 질서를 구축하는 태양신 "라"의 눈의 역할을 할 것이다.` },
-                en: { t: "Philosophy", c: "Intuition-3.0 addresses logical contradictions in the AI age. We serve as the 'Eye of RA'." },
-                es: { t: "Filosofía", c: "Intuition-3.0 enfrenta contradicciones lógicas. Seremos el 'Ojo de RA'." }
-            },
-            variables: {
-                ko: { t: "Variables (TCI)", c: `<span class="highlight-gold">Danger/Warning</span>: 의도를 파헤쳐 파괴해야 할 대상.<br><span class="highlight-gold">Safe/Deep Truth</span>: 팩트를 축적하여 보존해야 할 대상.<br><br><span class="highlight-gold">Trend</span> = 과거부터 현재까지 이어져 온 데이터의 궤적과 이번 정보가 얼마나 일치하는가를 측정합니다. 과거의 신뢰 관성을 담당합니다.<br><br><span class="highlight-gold">Consistency</span> = 기사가 기고한 내러티브가 실제 현실의 물리적 증거와 얼마나 정합성을 갖는가를 측정합니다. 현재의 물리적 확신을 담당합니다.<br><br><span class="highlight-gold">Intentionality</span> = 정보 발행자가 숨기고 있는 진짜 목적(Hidden Agenda)과 자본의 결속력을 역산합니다. 미래의 리스크 필터를 담당합니다.` },
-                en: { t: "Variables (TCI)", c: "T: Trend (Past Trust), C: Consistency (Physical Evidence), I: Intentionality (Risk Filter)." },
-                es: { t: "Variables (TCI)", c: "T: Tendencia, C: Consistencia, I: Intencionalidad." }
-            },
-            duty: {
-                ko: { t: "Information Duty", c: "본 분석은 볼트-너트-브릿지에 기반한 텍스트 분석 및 TCI기법에 의해 산출된 데이터 정합성 지표이며, 투자 권유 또는 수익 보장을 의미하지 않습니다. 모든 투자 결정의 책임은 전적으로 사용자 본인에게 있으며, Intuition 3.0은 투자 결과에 대해 법적 책임을 지지 않습니다." },
-                en: { t: "Information Duty", c: "This analysis is not an investment recommendation. Responsibility lies with the user." },
-                es: { t: "Deber de Información", c: "Este análisis no garantiza inversiones." }
-            }
-        };
+    <script>
+        const translations = {
+            danger: { ko: { t: "[0~0.25]: Danger", c: "◇의미: 물리적 실체(C)가 전무하거나 허위이며, 자본의 의도(I)가 특정 개인/세력의 탈출(Exit)을 위해 극도로 오염된 상태입니다.<br>◇조언: 즉각적인 정보 차단을 추천드립니다. 이 정보를 믿는 것은 도박이 아닌 자살행위입니다." }, en: { t: "Danger", c: "Physical reality is non-existent. Intent is contaminated for exit strategies. Immediate blocking recommended." }, es: { t: "Peligro", c: "La realidad física es inexistente. Se recomienda el bloqueo inmediato." } },
+            warning: { ko: { t: "[0.25~0.5]: Warning", c: "◇의미: 과거의 추세(T)는 존재하나, 현재 보도된 논리(C)에 심각한 결함이 있거나 정보 시차가 맞지 않는 상태입니다.<br>◇조언: 비판적 읽기를 추천드립니다. 증거 수집 시까지 결정을 유보하십시오." }, en: { t: "Warning", c: "Past trends exist but current logic is flawed. Critical reading recommended." }, es: { t: "Advertencia", c: "Existen tendencias pasadas pero la lógica es defectuosa." } },
+            safe: { ko: { t: "[0.5~0.75]: Safe", c: "◇의미: 추세(T)와 현재 실체(C)가 일치하기 시작했으며, 의도(I) 또한 시장의 보편적인 상식과 부합하는 상태입니다.<br>◇조언: 검증된 성장의 궤적을 의미합니다. 신뢰의 관성이 붙기 시작한 시점입니다." }, en: { t: "Safe", c: "Trends and reality align. Trust inertia is building." }, es: { t: "Seguro", c: "La tendencia y la realidad coinciden." } },
+            deep: { ko: { t: "[0.75~1.0]: Deep Truth", c: "◇의미: 본질적 실체의 최고의 경지입니다. 추세(T), 실체(C), 의도(I)가 완벽한 삼위일체를 이루어 시간이 흐를수록 가치가 증명되는 정보입니다.<br>◇조언: 강력한 확신을 가져도 좋은 구간입니다." }, en: { t: "Deep Truth", c: "Highest state of reality. Perfect trinity of T, C, and I." }, es: { t: "Verdad Profunda", c: "El estado más alto de la realidad esencial." } },
+            philosophy: {
+                ko: { t: "Philosophy", c: `우리 intuition-3.0[ILHAK Inside]는 현재 ai 정보화 시대에 매우 심각한 논리적인 모순을 직면하였다. 사람들은 더 이상 검색을 스스로 하지 않는다. 정보의 범람으로 정보의 피로도가 매우 높다. 숏품의 영향으로 정보의 비판적 사고 능력이 점점 약해지고있다. 이 모든 상황 속에서 이해관계가 내재된 정보, ai 환각(hallucination)문제로 사람들의 진실된 판단을 저해하고 있다는 것이였다. 그 중 특히 많은 사람들의 생명 같은 돈을 다루는 경제의 영역에서 이 문제가 특히 심각하다는 사실을 깨달았다. 그래서 "시장의 신뢰는 고정된 값이 아니라 누적된 팩트와 변화하는 의도의 종합이다, 시간=돈"라는 철학을 기술로 구현하고자 하였다. 현재 지금 모델에서의 주요 고객층은 금융업 종사자, 개인 투자자, 금융기관을 대상으로 하고 있다. 인간의 모든 판단의 과정이 입력-->이해-->판단을 거치는데 입력차원에서 오염된 데이터를 검증하고 신뢰도 점수와 구간을 통해 지금 분석하고 있는 매체의 비판적 이해도를 초효율적으로 높인뒤에 투자자들로 하여금 본인이 가지고 있는 시장 분석툴을 더 발전하는데 시간을 효율적으로 썼으면 하는 바람에 만든 "판단 보조 모듈"이다. 기존의 필터링을 통해 정보의 투명성을 높이는 기업들이 있었지만 그들은 언어적 모순이나 팩트를 보여주는데에 그쳤다. 하지만 우리는 다르다. TCI기법을 통해 팩트인 정보의 맥락, 의도까지 비판적으로 파해친다. T(trend)는 과거의 신뢰 관성을 담고 C(consistency)현재의 물리적 확신을 담고 I(intention)미래의 리스크 필터를 담는다.<br><br>그리고 이러한 변수들을 바탕으로 내러티브 맵을 제공할것이다.<br><br>마지막으로 우리는 지금 기업정보에 대해서만 이 기술을 쓰고 있지만 이 시장에서 독점적인 지위를 가진 후에 현금성 자산, 가상 디지털 자산, 실물성 자산(예: 부동산)의 영역까지 시장 점유율을 높인뒤에 전세계 모든 디지털 경제지는 우리 intuition의 검증을 받은 "올바른"정보로 구성이 될것이다. 즉, 기존의 우리가 권위라고 불렀던 허상을 진실된 기준에 의해 낱낱이 파괴하고 올바른 질서를 구축하는 태양신 "라"의 눈의 역할을 할 것이다.` },
+                en: { t: "Philosophy", c: "Intuition-3.0 addresses logical contradictions in the AI age. We serve as the 'Eye of RA'." },
+                es: { t: "Filosofía", c: "Intuition-3.0 enfrenta contradicciones lógicas. Seremos el 'Ojo de RA'." }
+            },
+            variables: {
+                ko: { t: "Variables (TCI)", c: `<span class="highlight-gold">Danger/Warning</span>: 의도를 파헤쳐 파괴해야 할 대상.<br><span class="highlight-gold">Safe/Deep Truth</span>: 팩트를 축적하여 보존해야 할 대상.<br><br><span class="highlight-gold">Trend</span> = 과거부터 현재까지 이어져 온 데이터의 궤적과 이번 정보가 얼마나 일치하는가를 측정합니다. 과거의 신뢰 관성을 담당합니다.<br><br><span class="highlight-gold">Consistency</span> = 기사가 기고한 내러티브가 실제 현실의 물리적 증거와 얼마나 정합성을 갖는가를 측정합니다. 현재의 물리적 확신을 담당합니다.<br><br><span class="highlight-gold">Intentionality</span> = 정보 발행자가 숨기고 있는 진짜 목적(Hidden Agenda)과 자본의 결속력을 역산합니다. 미래의 리스크 필터를 담당합니다.` },
+                en: { t: "Variables (TCI)", c: "T: Trend (Past Trust), C: Consistency (Physical Evidence), I: Intentionality (Risk Filter)." },
+                es: { t: "Variables (TCI)", c: "T: Tendencia, C: Consistencia, I: Intencionalidad." }
+            },
+            duty: {
+                ko: { t: "Information Duty", c: "본 분석은 볼트-너트-브릿지에 기반한 텍스트 분석 및 TCI기법에 의해 산출된 데이터 정합성 지표이며, 투자 권유 또는 수익 보장을 의미하지 않습니다. 모든 투자 결정의 책임은 전적으로 사용자 본인에게 있으며, Intuition 3.0은 투자 결과에 대해 법적 책임을 지지 않습니다." },
+                en: { t: "Information Duty", c: "This analysis is not an investment recommendation. Responsibility lies with the user." },
+                es: { t: "Deber de Información", c: "Este análisis no garantiza inversiones." }
+            }
+        };
 
-        const loginTrans = {
-            ko: { title: "Log In", reset: "비밀번호 찾기", google: "Google 로그인" },
-            en: { title: "Log In", reset: "Forgot Key", google: "Google Login" },
-            es: { title: "Acceso", reset: "Recuperar", google: "Google Entrar" }
-        };
+        const loginTrans = {
+            ko: { title: "Log In", reset: "비밀번호 찾기", google: "Google 로그인" },
+            en: { title: "Log In", reset: "Forgot Key", google: "Google Login" },
+            es: { title: "Acceso", reset: "Recuperar", google: "Google Entrar" }
+        };
 
-        const mainTxt = {
-            ko: { war: '우리는 "오염된 정보"에 전쟁을 선포한다', eye: '검색 엔진 필터 산업계의 "라의 눈"' },
-            en: { war: 'WE DECLARE WAR ON "CONTAMINATED INFORMATION"', eye: 'THE "EYE OF RA" IN THE SEARCH ENGINE FILTER INDUSTRY' },
-            es: { war: 'DECLARAMOS LA GUERRA A LA "INFORMACIÓN CONTAMINADA"', eye: 'EL "OJO DE RA" EN LA INDUSTRIA DE FILTROS DE BÚSQUEDA' }
-        };
+        const mainTxt = {
+            ko: { war: '우리는 "오염된 정보"에 전쟁을 선포한다', eye: '검색 엔진 필터 산업계의 "라의 눈"' },
+            en: { war: 'WE DECLARE WAR ON "CONTAMINATED INFORMATION"', eye: 'THE "EYE OF RA" IN THE SEARCH ENGINE FILTER INDUSTRY' },
+            es: { war: 'DECLARAMOS LA GUERRA A LA "INFORMACIÓN CONTAMINADA"', eye: 'EL "OJO DE RA" EN LA INDUSTRIA DE FILTROS DE BÚSQUEDA' }
+        };
 
-        let activeTab = '';
-        let currentLang = 'ko';
+        let activeTab = '';
+        let currentLang = 'ko';
 
-        function openLogin() { document.getElementById('login-modal').classList.remove('hidden'); translateLogin(currentLang); }
-        function closeLogin() { document.getElementById('login-modal').classList.add('hidden'); }
-        
-        function translateLogin(lang) {
-            currentLang = lang;
-            const data = loginTrans[lang];
-            document.getElementById('login-title').innerText = data.title;
-            document.getElementById('btn-pw-reset').innerText = data.reset;
-            document.getElementById('btn-google').innerText = data.google;
-        }
+        function openLogin() { document.getElementById('login-modal').classList.remove('hidden'); translateLogin(currentLang); }
+        function closeLogin() { document.getElementById('login-modal').classList.add('hidden'); }
+        
+        function translateLogin(lang) {
+            currentLang = lang;
+            const data = loginTrans[lang];
+            document.getElementById('login-title').innerText = data.title;
+            document.getElementById('btn-pw-reset').innerText = data.reset;
+            document.getElementById('btn-google').innerText = data.google;
+        }
 
-        function openTab(id) {
-            activeTab = id;
-            document.getElementById('unified-modal').classList.remove('hidden');
-            translateTab(currentLang);
-            if(document.getElementById('side-menu').classList.contains('active')) toggleMenu();
-        }
+        function openTab(id) {
+            activeTab = id;
+            document.getElementById('unified-modal').classList.remove('hidden');
+            translateTab(currentLang);
+            if(document.getElementById('side-menu').classList.contains('active')) toggleMenu();
+        }
 
-        function closeTab() { document.getElementById('unified-modal').classList.add('hidden'); }
-        function toggleMenu() { document.getElementById('side-menu').classList.toggle('active'); }
+        function closeTab() { document.getElementById('unified-modal').classList.add('hidden'); }
+        function toggleMenu() { document.getElementById('side-menu').classList.toggle('active'); }
 
-        function translateTab(lang) {
-            currentLang = lang;
-            const data = translations[activeTab][lang];
-            document.getElementById('tab-title').innerText = data.t;
-            document.getElementById('tab-content').innerHTML = data.c;
-            document.querySelectorAll('#unified-modal .modal-lang-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('m-' + lang).classList.add('active');
-        }
+        function translateTab(lang) {
+            currentLang = lang;
+            const data = translations[activeTab][lang];
+            document.getElementById('tab-title').innerText = data.t;
+            document.getElementById('tab-content').innerHTML = data.c;
+            document.querySelectorAll('#unified-modal .modal-lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('m-' + lang).classList.add('active');
+        }
 
-        function changeMainLang(lang) {
-            currentLang = lang;
-            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('main-' + lang).classList.add('active');
-            document.getElementById('main-war-txt').innerText = mainTxt[lang].war;
-            document.getElementById('main-eye-txt').innerText = mainTxt[lang].eye;
-        }
+        function changeMainLang(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('main-' + lang).classList.add('active');
+            document.getElementById('main-war-txt').innerText = mainTxt[lang].war;
+            document.getElementById('main-eye-txt').innerText = mainTxt[lang].eye;
+        }
 
-        window.onload = function() {
-            const code = new URLSearchParams(window.location.search).get('code');
-            if (code) document.getElementById('target-stock-display').innerText = code + " 실시간 분석";
-        };
-    </script>
+        window.onload = function() {
+            const code = new URLSearchParams(window.location.search).get('code');
+            if (code) document.getElementById('target-stock-display').innerText = code + " 실시간 분석";
+        };
+    </script>
 </body>
 </html>

@@ -43,18 +43,14 @@
             box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
         }
         
-        /* 로그인 창 전용 스타일 */
+        /* 로그인 창 스타일 */
         .login-container { border: 1px solid var(--gold-solid); background: #0a0a0a; color: var(--gold-solid); }
-        .login-input { background: transparent; border-bottom: 1px solid rgba(212, 175, 55, 0.5); outline: none; transition: 0.3s; width: 100%; }
+        .login-input { background: transparent; border-bottom: 1px solid rgba(212, 175, 55, 0.5); outline: none; transition: 0.3s; }
         .login-input:focus { border-bottom: 1px solid var(--gold-solid); }
 
         .modal-lang-btn { cursor: pointer; font-weight: bold; border: 1px solid rgba(212, 175, 55, 0.3); padding: 4px 10px; border-radius: 4px; font-size: 12px; }
         .modal-lang-btn.active { background-color: var(--gold-solid); color: black; }
         .highlight-gold { color: #8a6d3b; font-weight: 700; text-decoration: underline; }
-
-        /* 탭 버튼 스타일 */
-        .auth-tab { cursor: pointer; padding: 8px 20px; font-weight: bold; font-size: 12px; transition: 0.3s; border: 1px solid var(--gold-solid); }
-        .auth-tab.active { background: var(--gold-solid); color: black; }
     </style>
 </head>
 <body>
@@ -116,52 +112,40 @@
 
     <div id="login-modal" class="modal-overlay hidden">
         <div class="relative w-full max-w-md mx-4">
-            <div class="absolute -top-10 left-0 flex space-x-2">
-                <div onclick="switchAuthMode('login')" id="tab-login" class="auth-tab active uppercase">Log In</div>
-                <div onclick="switchAuthMode('join')" id="tab-join" class="auth-tab uppercase">Join</div>
+            <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#0a0a0a] border border-[#D4AF37] px-8 py-2 z-10">
+                <h2 id="login-title" class="text-xl tracking-[0.3em] font-bold text-[#D4AF37] uppercase">Log In</h2>
             </div>
-
             <div class="login-container p-12 pt-16 relative">
                 <div class="absolute top-4 right-4 flex items-center space-x-3">
                     <div class="flex space-x-1 border-r border-[#D4AF37]/30 pr-3">
-                        <span onclick="translateLogin('ko')" class="modal-lang-btn text-[10px] cursor-pointer">KO</span>
-                        <span onclick="translateLogin('en')" class="modal-lang-btn text-[10px] cursor-pointer">EN</span>
-                        <span onclick="translateLogin('es')" class="modal-lang-btn text-[10px] cursor-pointer">ES</span>
+                        <span onclick="translateLogin('ko')" class="modal-lang-btn text-[10px] cursor-pointer hover:text-white">KO</span>
+                        <span onclick="translateLogin('en')" class="modal-lang-btn text-[10px] cursor-pointer hover:text-white">EN</span>
+                        <span onclick="translateLogin('es')" class="modal-lang-btn text-[10px] cursor-pointer hover:text-white">ES</span>
                     </div>
-                    <button onclick="closeLogin()" class="text-[#D4AF37] text-2xl leading-none">&times;</button>
+                    <button onclick="closeLogin()" class="text-[#D4AF37] text-2xl leading-none hover:text-white">&times;</button>
                 </div>
-
-                <div class="space-y-8 mb-10">
+                <div class="space-y-8 mb-12">
                     <div class="flex items-center">
-                        <label class="w-12 font-bold text-sm tracking-widest">ID:</label>
-                        <input type="text" id="login-id" class="flex-1 login-input bg-transparent px-2 py-1 text-white text-sm" placeholder="EMAIL ADDRESS">
+                        <label class="w-12 font-bold text-sm tracking-widest text-[#D4AF37]">ID:</label>
+                        <input type="text" id="login-id" class="flex-1 login-input bg-transparent px-2 py-1 text-white text-sm" placeholder="ENTER IDENTITY">
                     </div>
                     <div class="flex items-center">
-                        <label class="w-12 font-bold text-sm tracking-widest">PW:</label>
-                        <input type="password" id="login-pw" class="flex-1 login-input bg-transparent px-2 py-1 text-white text-sm" placeholder="ACCESS KEY">
+                        <label class="w-12 font-bold text-sm tracking-widest text-[#D4AF37]">PW:</label>
+                        <input type="password" id="login-pw" class="flex-1 login-input bg-transparent px-2 py-1 text-white text-sm" placeholder="ENTER ACCESS KEY">
                     </div>
                 </div>
-
-                <div id="legal-box" class="hidden mb-8 space-y-3">
-                    <div class="flex items-start space-x-2">
-                        <input type="checkbox" id="agree-terms" class="mt-1">
-                        <label class="text-[9px] text-white/70 leading-tight">
-                            [필수] 개인정보 수집 및 TCI 엔진 이용 약관에 동의하며, 모든 데이터가 암호화되어 보호됨을 인지합니다.
-                        </label>
-                    </div>
-                </div>
-
-                <div id="social-box" class="grid grid-cols-2 gap-4 mb-6">
+                
+                <div class="grid grid-cols-2 gap-4">
                     <button onclick="handleGoogleLogin()" class="border border-[#D4AF37] py-3 flex items-center justify-center space-x-2 hover:bg-[#D4AF37]/10 transition-all">
                         <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-4 h-4">
                         <span id="btn-google" class="text-[10px] font-bold tracking-tighter">Google 로그인</span>
                     </button>
-                    <button onclick="alert('Key Gen')" class="border border-[#D4AF37] py-3 flex items-center justify-center hover:bg-[#D4AF37]/10 transition-all">
+                    
+                    <button onclick="alert('Key Recovery')" class="border border-[#D4AF37] py-3 flex items-center justify-center hover:bg-[#D4AF37]/10 transition-all">
                         <span id="btn-pw-reset" class="text-[10px] font-bold tracking-tighter">비밀번호 찾기</span>
                     </button>
                 </div>
-
-                <button id="main-auth-btn" class="w-full py-4 bg-[#D4AF37] text-black font-black uppercase tracking-[0.5em] text-xs hover:bg-white transition-all">Execute Access</button>
+                <button class="w-full mt-6 py-4 bg-[#D4AF37] text-black font-black uppercase tracking-[0.5em] text-xs hover:bg-white transition-all">Execute Access</button>
             </div>
         </div>
     </div>
@@ -180,77 +164,69 @@
     </div>
 
     <script>
-        // 기존 TCI 데이터베이스 및 다국어 로직
+        // [삽입] Google OAuth 2.0 실행 로직
+        function handleGoogleLogin() {
+            const CLIENT_ID = "여기에_발급받은_ID_입력.apps.googleusercontent.com"; //
+            const REDIRECT_URI = "https://ilhacos-os.com"; 
+            const SCOPE = encodeURIComponent("https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile");
+            
+            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=${SCOPE}`;
+            
+            window.location.href = authUrl; // 구글 서버로 사용자 전송
+        }
+
         const translations = {
-            danger: { ko: { t: "[0~0.25]: Danger", c: "◇의미: 물리적 실체(C)가 전무하거나 허위이며, 자본의 의도(I)가 특정 개인/세력의 탈출(Exit)을 위해 극도로 오염된 상태입니다.<br>◇조언: 즉각적인 정보 차단을 추천드립니다. 이 정보를 믿는 것은 도박이 아닌 자살행위입니다." }, en: { t: "Danger", c: "Physical reality is non-existent. Intent is contaminated for exit strategies." }, es: { t: "Peligro", c: "La realidad física es inexistente." } },
-            philosophy: { ko: { t: "Philosophy", c: `우리 intuition-3.0[ILHAK Inside]는 현재 ai 정보화 시대에 매우 심각한 논리적인 모순을 직면하였다... (중략) ...태양신 "라"의 눈의 역할을 할 것이다.` }, en: { t: "Philosophy", c: "Intuition-3.0 faces logical contradictions in the AI age." }, es: { t: "Filosofía", c: "Intuition-3.0 enfrenta contradicciones lógicas." } },
-            variables: { ko: { t: "Variables (TCI)", c: `<span class="highlight-gold">Trend</span> = 과거 데이터 궤적.<br><span class="highlight-gold">Consistency</span> = 현실 물리적 확신.<br><span class="highlight-gold">Intentionality</span> = 미래 리스크 필터.` }, en: { t: "Variables (TCI)", c: "T: Trend, C: Consistency, I: Intentionality." }, es: { t: "Variables (TCI)", c: "T: Tendencia, C: Consistencia, I: Intención." } },
-            duty: { ko: { t: "Information Duty", c: "본 분석은 볼트-너트-브릿지에 기반한 텍스트 분석 및 TCI기법에 의해 산출된 데이터 정합성 지표이며, 투자 권유 또는 수익 보장을 의미하지 않습니다." }, en: { t: "Information Duty", c: "This is not an investment recommendation." }, es: { t: "Deber de Información", c: "Este análisis no garantiza inversiones." } }
+            danger: { ko: { t: "[0~0.25]: Danger", c: "◇의미: 물리적 실체(C)가 전무하거나 허위이며, 자본의 의도(I)가 특정 개인/세력의 탈출(Exit)을 위해 극도로 오염된 상태입니다.<br>◇조언: 즉각적인 정보 차단을 추천드립니다. 이 정보를 믿는 것은 도박이 아닌 자살행위입니다." }, en: { t: "Danger", c: "Physical reality is non-existent. Intent is contaminated for exit strategies. Immediate blocking recommended." }, es: { t: "Peligro", c: "La realidad física es inexistente. Se recomienda el bloqueo inmediato." } },
+            philosophy: {
+                ko: { t: "Philosophy", c: `우리 intuition-3.0[ILHAK Inside]는 현재 ai 정보화 시대에 매우 심각한 논리적인 모순을 직면하였다... (중략) ...올바른 질서를 구축하는 태양신 "라"의 눈의 역할을 할 것이다.` },
+                en: { t: "Philosophy", c: "Intuition-3.0 addresses logical contradictions in the AI age. We serve as the 'Eye of RA'." },
+                es: { t: "Filosofía", c: "Intuition-3.0 enfrenta contradicciones lógicas. Seremos el 'Ojo de RA'." }
+            },
+            variables: {
+                ko: { t: "Variables (TCI)", c: `<span class="highlight-gold">Danger/Warning</span>: 의도를 파헤쳐 파괴해야 할 대상.<br><span class="highlight-gold">Safe/Deep Truth</span>: 팩트를 축적하여 보존해야 할 대상.<br><br><span class="highlight-gold">Trend</span> = 과거 데이터 궤적 담당.<br><span class="highlight-gold">Consistency</span> = 현재 물리적 확신 담당.<br><span class="highlight-gold">Intentionality</span> = 미래 리스크 필터 담당.` },
+                en: { t: "Variables (TCI)", c: "T: Trend (Past Trust), C: Consistency (Physical Evidence), I: Intentionality (Risk Filter)." },
+                es: { t: "Variables (TCI)", c: "T: Tendencia, C: Consistencia, I: Intencionalidad." }
+            },
+            duty: {
+                ko: { t: "Information Duty", c: "본 분석은 볼트-너트-브릿지에 기반한 텍스트 분석 및 TCI기법에 의해 산출된 데이터 정합성 지표이며, 투자 권유 또는 수익 보장을 의미하지 않습니다..." },
+                en: { t: "Information Duty", c: "This analysis is not an investment recommendation. Responsibility lies with the user." },
+                es: { t: "Deber de Información", c: "Este análisis no garantiza inversiones." }
+            }
         };
 
         const loginTrans = {
-            ko: { loginBtn: "Execute Access", joinBtn: "Initialize Account", reset: "비밀번호 찾기", google: "Google 로그인" },
-            en: { loginBtn: "Execute Access", joinBtn: "Initialize Account", reset: "Forgot Key", google: "Google Login" },
-            es: { loginBtn: "Acceso", joinBtn: "Crear Cuenta", reset: "Recuperar", google: "Google Entrar" }
+            ko: { title: "Log In", reset: "비밀번호 찾기", google: "Google 로그인" },
+            en: { title: "Log In", reset: "Forgot Key", google: "Google Login" },
+            es: { title: "Acceso", reset: "Recuperar", google: "Google Entrar" }
         };
 
         const mainTxt = {
             ko: { war: '우리는 "오염된 정보"에 전쟁을 선포한다', eye: '검색 엔진 필터 산업계의 "라의 눈"' },
             en: { war: 'WE DECLARE WAR ON "CONTAMINATED INFORMATION"', eye: 'THE "EYE OF RA" IN THE SEARCH ENGINE FILTER INDUSTRY' },
-            es: { war: 'DECLARAMOS LA GUERRA A LA "INFORMACIÓN CONTAMINADA"', eye: 'EL "OJO DE RA" EN LA INDUSTRIA DE FILTROS DE BÚSQUEDA' }
+            es: { war: 'DECLARAMOS LA GUERRA A LA "INFORMACIÓN CONTAMINADA"', eye: 'EL "OJO DE RA" EN LA INDUSTRIA DE FIL트ROS DE BÚSQUEDA' }
         };
 
         let activeTab = '';
         let currentLang = 'ko';
-        let authMode = 'login';
 
-        // 탭 전환 로직 (Login <-> Join)
-        function switchAuthMode(mode) {
-            authMode = mode;
-            const legalBox = document.getElementById('legal-box');
-            const socialBox = document.getElementById('social-box');
-            const mainBtn = document.getElementById('main-auth-btn');
-            
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            document.getElementById('tab-' + mode).classList.add('active');
-
-            if (mode === 'join') {
-                legalBox.classList.remove('hidden');
-                socialBox.classList.add('hidden'); // 정직한 가입을 위해 소셜 가입은 숨김 제안
-                mainBtn.innerText = loginTrans[currentLang].joinBtn;
-            } else {
-                legalBox.classList.add('hidden');
-                socialBox.classList.remove('hidden');
-                mainBtn.innerText = loginTrans[currentLang].loginBtn;
-            }
-        }
-
-        // 로그인 제어 및 다국어
         function openLogin() { document.getElementById('login-modal').classList.remove('hidden'); translateLogin(currentLang); }
         function closeLogin() { document.getElementById('login-modal').classList.add('hidden'); }
         
         function translateLogin(lang) {
             currentLang = lang;
             const data = loginTrans[lang];
+            document.getElementById('login-title').innerText = data.title;
             document.getElementById('btn-pw-reset').innerText = data.reset;
             document.getElementById('btn-google').innerText = data.google;
-            document.getElementById('main-auth-btn').innerText = (authMode === 'login') ? data.loginBtn : data.joinBtn;
         }
 
-        function handleGoogleLogin() {
-            const CLIENT_ID = "YOUR_CLIENT_ID.apps.googleusercontent.com";
-            const REDIRECT_URI = "https://ilhacos-os.com";
-            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=email profile`;
-            window.location.href = authUrl;
-        }
-
-        // 기본 모달 및 메인 로직
         function openTab(id) {
             activeTab = id;
             document.getElementById('unified-modal').classList.remove('hidden');
             translateTab(currentLang);
             if(document.getElementById('side-menu').classList.contains('active')) toggleMenu();
         }
+
         function closeTab() { document.getElementById('unified-modal').classList.add('hidden'); }
         function toggleMenu() { document.getElementById('side-menu').classList.toggle('active'); }
 
@@ -270,6 +246,11 @@
             document.getElementById('main-war-txt').innerText = mainTxt[lang].war;
             document.getElementById('main-eye-txt').innerText = mainTxt[lang].eye;
         }
+
+        window.onload = function() {
+            const code = new URLSearchParams(window.location.search).get('code');
+            if (code) document.getElementById('target-stock-display').innerText = code + " 실시간 분석";
+        };
     </script>
 </body>
 </html>

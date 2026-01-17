@@ -18,7 +18,6 @@
             min-height: 100vh;
         }
 
-        /* 리포트 전체 컨테이너 */
         .report-wrapper {
             width: 90%;
             max-width: 900px;
@@ -27,10 +26,9 @@
             padding: 40px;
             background: #0a0a0a;
             box-shadow: 0 0 50px rgba(184, 134, 11, 0.2);
-            position: relative;
+            position: relative; /* Home 버튼 배치를 위한 기준점 */
         }
 
-        /* 상단 타이틀 섹션 */
         .header {
             text-align: center;
             border-bottom: 2px double #b8860b;
@@ -52,7 +50,6 @@
             margin-top: 15px;
         }
 
-        /* TCI 정밀 분석 그리드 */
         .analysis-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -93,13 +90,35 @@
             color: #aaa;
         }
 
-        /* 하단 주의사항 */
+        /* [추가] 팀장 요청: 우측 하단 Home 버튼 스타일 */
+        .home-btn {
+            position: absolute;
+            bottom: 30px;
+            right: 40px;
+            padding: 10px 25px;
+            border: 1px solid #b8860b;
+            background: transparent;
+            color: #b8860b;
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .home-btn:hover {
+            background: #b8860b;
+            color: #000;
+            box-shadow: 0 0 15px rgba(184, 134, 11, 0.5);
+        }
+
         .disclaimer {
             font-size: 0.8rem;
             color: #555;
             text-align: center;
             border-top: 1px solid #222;
             padding-top: 20px;
+            margin-bottom: 20px;
             line-height: 1.5;
         }
     </style>
@@ -136,19 +155,19 @@
             본 리포트는 TCI 기법에 의해 산출된 데이터 정합성 지표이며, 투자 권유를 의미하지 않습니다.<br>
             모든 투자 결정의 책임은 사용자 본인에게 있습니다.
         </div>
+
+        <a href="https://ilhacos-os.com" class="home-btn">HOME</a>
     </div>
 
     <script>
         window.onload = () => {
-            // URL 파라미터에서 종목 코드를 읽어옴
             const params = new URLSearchParams(window.location.search);
             const stockCode = params.get('code');
             
             if (stockCode) {
                 document.getElementById('stock-code-display').innerText = "분석 대상: " + stockCode;
-                console.log(stockCode + " 정밀 리포트 가동...");
             } else {
-                document.getElementById('stock-code-display').innerText = "에러: 종목 정보가 전달되지 않았습니다.";
+                document.getElementById('stock-code-display').innerText = "에러: 종목 정보 없음";
             }
         };
     </script>

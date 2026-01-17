@@ -7,93 +7,42 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;700&display=swap');
-        
-        :root {
-            --gold-primary: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
-            --gold-solid: #D4AF37;
-            --egypt-blue: #1a2a6c;
-            --papyrus-bg: #f2e3bc;
-        }
-
+        :root { --gold-solid: #D4AF37; }
         body { background-color: #000; color: var(--gold-solid); font-family: 'Cinzel', serif; margin: 0; overflow-x: hidden; }
         .hidden { display: none !important; }
-        
-        /* TCI 아이콘 레이아웃 */
-        .status-box { flex: 1; max-width: 100px; text-align: center; cursor: pointer; transition: transform 0.3s; z-index: 50; }
-        .status-box:hover { transform: translateY(-5px); }
-        .icon-circle { 
-            width: 100%; aspect-ratio: 1/1; border-radius: 50%; border: 1px solid rgba(212, 175, 55, 0.3);
-            display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 0.5rem;
-            background-color: #050505;
-        }
-        .icon-circle img { width: 100%; height: 100%; object-fit: cover; }
-        
-        /* 인터페이스 제어 */
-        .lang-btn { cursor: pointer; opacity: 0.5; transition: 0.3s; padding: 2px 6px; }
-        .lang-btn.active { opacity: 1; border-bottom: 2px solid var(--gold-solid); }
-
-        #side-menu { transition: transform 0.5s ease; transform: translateY(-100%); z-index: 150; position: fixed; inset: 0; background: black; }
-        #side-menu.active { transform: translateY(0); }
-
-        /* 모달 공통 */
         .modal-overlay { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.9); }
-        .papyrus-bg { 
-            background-color: #c2a371; background-image: url('https://www.transparenttextures.com/patterns/papyros.png'); 
-            color: #1a1508; font-family: 'Noto Sans KR', sans-serif; border-left: 12px solid #3e2b1c; border-right: 12px solid #3e2b1c;
-            box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
-        }
-        
-        /* 로그인 창 전용 스타일 */
         .login-container { border: 1px solid var(--gold-solid); background: #0a0a0a; color: var(--gold-solid); }
-        .login-input { background: transparent; border-bottom: 1px solid rgba(212, 175, 55, 0.5); outline: none; transition: 0.3s; width: 100%; color: white; }
-        .login-input:focus { border-bottom: 1px solid var(--gold-solid); }
-
-        .modal-lang-btn { cursor: pointer; font-weight: bold; border: 1px solid rgba(212, 175, 55, 0.3); padding: 4px 10px; border-radius: 4px; font-size: 12px; }
-        .modal-lang-btn.active { background-color: var(--gold-solid); color: black; }
+        .login-input { background: transparent; border-bottom: 1px solid rgba(212, 175, 55, 0.5); outline: none; width: 100%; color: white; }
+        .status-box { flex: 1; max-width: 100px; text-align: center; cursor: pointer; transition: transform 0.3s; z-index: 50; }
+        .icon-circle { width: 100%; aspect-ratio: 1/1; border-radius: 50%; border: 1px solid rgba(212, 175, 55, 0.3); display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 0.5rem; background-color: #050505; }
+        .icon-circle img { width: 100%; height: 100%; object-fit: cover; }
+        .papyrus-bg { background-color: #c2a371; background-image: url('https://www.transparenttextures.com/patterns/papyros.png'); color: #1a1508; font-family: 'Noto Sans KR', sans-serif; border-left: 12px solid #3e2b1c; border-right: 12px solid #3e2b1c; box-shadow: 0 0 50px rgba(212, 175, 55, 0.2); }
     </style>
 </head>
 <body>
 
     <header class="fixed top-0 left-0 w-full p-6 flex justify-end items-center z-[200] space-x-6">
         <div class="flex space-x-3 text-xs tracking-widest border-r border-[#D4AF37]/30 pr-6">
-            <span onclick="changeMainLang('ko')" id="main-ko" class="lang-btn active">KO</span>
-            <span onclick="changeMainLang('en')" id="main-en" class="lang-btn">EN</span>
-            <span onclick="changeMainLang('es')" id="main-es" class="lang-btn">ES</span>
+            <span onclick="changeMainLang('ko')" id="main-ko" class="cursor-pointer opacity-100 border-b-2 border-[#D4AF37]">KO</span>
+            <span onclick="changeMainLang('en')" id="main-en" class="cursor-pointer opacity-50">EN</span>
+            <span onclick="changeMainLang('es')" id="main-es" class="cursor-pointer opacity-50">ES</span>
         </div>
-        <button onclick="toggleMenu()" class="group space-y-2 p-2 focus:outline-none">
-            <div id="bar1" class="w-8 h-[1px] bg-[#D4AF37] transition-all"></div>
-            <div id="bar2" class="w-8 h-[1px] bg-[#D4AF37] transition-all"></div>
-        </button>
     </header>
 
     <main class="min-h-screen flex flex-col items-center justify-center pt-20">
         <div id="target-stock-display" class="text-[#D4AF37] mb-8 tracking-[0.3em] text-sm font-bold uppercase transition-all duration-1000">READY TO ANALYZE</div>
 
         <div class="flex justify-center gap-4 md:gap-8 w-full max-w-md mb-12 px-4 relative z-50">
-            <div onclick="openTab('danger')" class="status-box">
-                <div class="icon-circle"><img src="1768478515365.jpg"></div>
-                <p class="text-[10px] font-bold text-red-500 uppercase">Danger</p>
-            </div>
-            <div onclick="openTab('warning')" class="status-box">
-                <div class="icon-circle"><img src="1768478520039.jpg"></div>
-                <p class="text-[10px] font-bold text-orange-500 uppercase">Warning</p>
-            </div>
-            <div onclick="openTab('safe')" class="status-box">
-                <div class="icon-circle"><img src="1768478522258.jpg"></div>
-                <p class="text-[10px] font-bold text-green-500 uppercase">Safe</p>
-            </div>
-            <div onclick="openTab('deep')" class="status-box">
-                <div class="icon-circle"><img src="1768478524524.jpg"></div>
-                <p class="text-[10px] font-bold text-blue-500 uppercase">Deep Truth</p>
-            </div>
+            <div class="status-box"><div class="icon-circle"><img src="1768478515365.jpg"></div><p class="text-[10px] font-bold text-red-500">DANGER</p></div>
+            <div class="status-box"><div class="icon-circle"><img src="1768478520039.jpg"></div><p class="text-[10px] font-bold text-orange-500">WARNING</p></div>
+            <div class="status-box"><div class="icon-circle"><img src="1768478522258.jpg"></div><p class="text-[10px] font-bold text-green-500">SAFE</p></div>
+            <div class="status-box"><div class="icon-circle"><img src="1768478524524.jpg"></div><p class="text-[10px] font-bold text-blue-500">DEEP TRUTH</p></div>
         </div>
 
         <div class="text-center mb-10 px-6">
-            <h2 id="main-war-txt" class="text-lg md:text-2xl tracking-[0.2em] font-light leading-tight mb-2 uppercase">우리는 "오염된 정보"에 전쟁을 선포한다</h2>
-            <p id="main-eye-txt" class="text-sm md:text-lg tracking-[0.3em] font-light italic uppercase">검색 엔진 필터 산업계의 "라의 눈"</p>
+            <h2 id="main-war-txt" class="text-lg md:text-2xl tracking-[0.2em] font-light mb-2 uppercase">우리는 "오염된 정보"에 전쟁을 선포한다</h2>
+            <p id="main-eye-txt" class="text-sm md:text-lg tracking-[0.3em] font-light italic uppercase font-bold">검색 엔진 필터 산업계의 "라의 눈"</p>
         </div>
-
-        <img src="long.png" class="w-56 h-56 md:w-64 md:h-64 object-contain mb-10">
 
         <div class="text-center">
             <h1 class="text-4xl md:text-6xl tracking-[0.4em] font-light mb-4">INTUITION 3.0</h1>
@@ -102,172 +51,59 @@
         </div>
     </main>
 
-    <div id="side-menu" class="flex flex-col pt-32 px-12 space-y-8 text-2xl font-light">
-        <button onclick="openTab('philosophy')" class="text-left uppercase">Philosophy</button>
-        <button onclick="openTab('variables')" class="text-left uppercase">Variables (TCI)</button>
-        <button onclick="openTab('duty')" class="text-left uppercase">Information Duty</button>
-        <button onclick="toggleMenu()" class="mt-20 text-sm border-b border-[#D4AF37] pb-1 uppercase">Back to main page</button>
-    </div>
-
     <div id="login-modal" class="modal-overlay hidden">
         <div class="relative w-full max-w-md mx-4">
-            <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#0a0a0a] border border-[#D4AF37] px-8 py-2 z-10">
-                <h2 id="login-title" class="text-xl tracking-[0.3em] font-bold text-[#D4AF37] uppercase">Log In</h2>
-            </div>
             <div class="login-container p-12 pt-16 relative">
-                <div class="absolute top-4 right-4 flex items-center space-x-3">
-                    <div class="flex space-x-1 border-r border-[#D4AF37]/30 pr-3">
-                        <span onclick="translateLogin('ko')" class="modal-lang-btn text-[10px] cursor-pointer hover:text-white">KO</span>
-                        <span onclick="translateLogin('en')" class="modal-lang-btn text-[10px] cursor-pointer hover:text-white">EN</span>
-                        <span onclick="translateLogin('es')" class="modal-lang-btn text-[10px] cursor-pointer hover:text-white">ES</span>
-                    </div>
-                    <button onclick="closeLogin()" class="text-[#D4AF37] text-2xl leading-none hover:text-white">&times;</button>
-                </div>
+                <button onclick="closeLogin()" class="absolute top-4 right-4 text-[#D4AF37] text-2xl">&times;</button>
                 <div class="space-y-8 mb-10">
-                    <div class="flex items-center">
-                        <label class="w-12 font-bold text-sm tracking-widest text-[#D4AF37]">ID:</label>
-                        <input type="text" id="login-id" class="flex-1 login-input px-2 py-1 text-sm" placeholder="ENTER IDENTITY">
-                    </div>
-                    <div class="flex items-center">
-                        <label class="w-12 font-bold text-sm tracking-widest text-[#D4AF37]">PW:</label>
-                        <input type="password" id="login-pw" class="flex-1 login-input px-2 py-1 text-sm" placeholder="ENTER ACCESS KEY">
-                    </div>
+                    <div class="flex items-center"><label class="w-12 font-bold text-sm text-[#D4AF37]">ID:</label><input type="text" class="flex-1 login-input px-2 text-sm" placeholder="ENTER IDENTITY"></div>
+                    <div class="flex items-center"><label class="w-12 font-bold text-sm text-[#D4AF37]">PW:</label><input type="password" class="flex-1 login-input px-2 text-sm" placeholder="ENTER ACCESS KEY"></div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <button onclick="handleGoogleLogin()" class="border border-[#D4AF37] py-3 flex items-center justify-center space-x-2 hover:bg-[#D4AF37]/10 transition-all">
                         <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-4 h-4">
-                        <span id="btn-google" class="text-[10px] font-bold tracking-tighter uppercase">Google 로그인</span>
+                        <span class="text-[10px] font-bold uppercase">Google 로그인</span>
                     </button>
-                    <button onclick="alert('Key Recovery')" class="border border-[#D4AF37] py-3 flex items-center justify-center hover:bg-[#D4AF37]/10 transition-all">
-                        <span id="btn-pw-reset" class="text-[10px] font-bold tracking-tighter uppercase">비밀번호 찾기</span>
-                    </button>
+                    <button class="border border-[#D4AF37] py-3 text-[10px] font-bold uppercase">비밀번호 찾기</button>
                 </div>
-                <button class="w-full mt-6 py-4 bg-[#D4AF37] text-black font-black uppercase tracking-[0.5em] text-xs hover:bg-white transition-all">Execute Access</button>
+                <button class="w-full mt-6 py-4 bg-[#D4AF37] text-black font-black tracking-[0.5em] text-xs">Execute Access</button>
             </div>
-        </div>
-    </div>
-
-    <div id="unified-modal" class="modal-overlay hidden">
-        <div class="papyrus-bg max-w-4xl w-full h-[85vh] p-8 md:p-12 shadow-2xl overflow-y-auto relative">
-            <div class="absolute top-6 right-6 flex space-x-2">
-                <span onclick="translateTab('ko')" id="m-ko" class="modal-lang-btn active">🇰🇷 KO</span>
-                <span onclick="translateTab('en')" id="m-en" class="modal-lang-btn">🇺🇸 EN</span>
-                <span onclick="translateTab('es')" id="m-es" class="modal-lang-btn">🇪🇸 ES</span>
-            </div>
-            <h3 id="tab-title" class="text-xl md:text-2xl font-bold mb-6 border-b border-black/20 pb-2 uppercase text-[#1a1508]">TITLE</h3>
-            <div id="tab-content" class="text-sm md:text-base leading-relaxed break-keep font-medium text-[#1a1508]"></div>
-            <button onclick="closeTab()" class="mt-12 w-full border-2 border-black py-3 font-bold uppercase tracking-widest hover:bg-black hover:text-[#c2a371] transition-colors">Close Scroll</button>
         </div>
     </div>
 
     <script>
-        /**
-         * [Vercel 실전 배포 엔진] Google OAuth 2.0 및 신원 확인 시스템
-         */
+        // 1. 구글 로그인 실행 엔진 (Vercel 도메인 고정)
+        function handleGoogleLogin() {
+            const CLIENT_ID = "1031855227343-1mjtf15p7bu7r1850kdbau002bvd2ue1.apps.googleusercontent.com";
+            const REDIRECT_URI = "https://intuition3-0.vercel.app/index.html";
+            
+            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=email%20profile`;
+            
+            console.log("Vercel에서 요청하는 리디렉션 주소:", REDIRECT_URI);
+            window.location.href = authUrl; 
+        }
 
-        // 1. 페이지 로드 시 구글 토큰 수신 및 사용자 이름 처리
+        // 2. 신원 확인 및 성명 점등 로직
         window.onload = function() {
             const hash = window.location.hash;
             if (hash && hash.includes("access_token")) {
                 const token = new URLSearchParams(hash.substring(1)).get("access_token");
-                
-                // 구글 유저 정보 API 호출
                 fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${token}`)
                     .then(res => res.json())
                     .then(data => {
-                        // [UI 반영] 상단 상태창에 팀장님 실명 주입
-                        const displayArea = document.getElementById('target-stock-display');
-                        if (displayArea) {
-                            displayArea.innerText = `${data.name} [AUTHORIZED ACCESS]`;
-                            displayArea.classList.remove('text-[#D4AF37]');
-                            displayArea.classList.add('text-green-500'); // 신원 확인 성공 시 녹색 점등
+                        const display = document.getElementById('target-stock-display');
+                        if (display) {
+                            display.innerText = `${data.name} [AUTHORIZED ACCESS]`;
+                            display.classList.replace('text-[#D4AF37]', 'text-green-500'); // 녹색 승인등 점등
                         }
-                        alert(`신원 확인 완료: ${data.name} 팀장님, Intuition 3.0 시스템 접속을 승인합니다.`);
+                        alert(`신원 확인 완료: ${data.name} 팀장님, 접속을 승인합니다.`);
                         closeLogin();
-                    })
-                    .catch(err => console.error("인증 처리 실패:", err));
+                    });
             }
         };
 
-        // 2. 구글 로그인 실행 (팀장님의 Vercel 도메인 고정)
-        function handleGoogleLogin() {
-            // 사진 b84b15d1에서 확인한 팀장님의 클라이언트 ID
-            const CLIENT_ID = "1031855227343-1mjtf15p7bu7r1850kdbau002bvd2ue1.apps.googleusercontent.com"; 
-            
-            // [Vercel 전용] 구글 콘솔에 등록한 리디렉션 URI와 100% 일치
-            const REDIRECT_URI = "https://intuition3-0.vercel.app/index.html"; 
-            
-            // 신원 정보(이메일, 프로필) 요청 스코프 설정
-            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=email%20profile`;
-            
-            window.location.href = authUrl; 
-        }
-
-        /**
-         * UI 제어 및 다국어 로직
-         */
-        const translations = {
-            danger: { ko: { t: "[0~0.25]: Danger", c: "물리적 실체(C)가 전무하거나 허위인 상태입니다." }, en: { t: "Danger", c: "Physical reality is non-existent." }, es: { t: "Peligro", c: "La realidad física es inexistente." } },
-            warning: { ko: { t: "[0.25~0.5]: Warning", c: "정보의 일관성이 부족합니다." }, en: { t: "Warning", c: "Inconsistent information." }, es: { t: "Aviso", c: "Información inconsistente." } },
-            safe: { ko: { t: "[0.5~0.75]: Safe", c: "신뢰할 수 있는 데이터입니다." }, en: { t: "Safe", c: "Reliable data." }, es: { t: "Seguro", c: "Datos confiables." } },
-            deep: { ko: { t: "[0.75~1.0]: Deep Truth", c: "완전한 팩트와 의도가 확인되었습니다." }, en: { t: "Deep Truth", c: "Verified facts and intentions." }, es: { t: "Verdad Profunda", c: "Hechos e intenciones verificados." } },
-            philosophy: { ko: { t: "Philosophy", c: `Intuition-3.0은 AI 정보화 시대의 논리적 모순을 해결합니다.` }, en: { t: "Philosophy", c: "Intuition-3.0 addresses AI contradictions." }, es: { t: "Filosofía", c: "Intuition-3.0 enfrenta contradicciones." } },
-            variables: { ko: { t: "Variables (TCI)", c: "T: Trend, C: Consistency, I: Intention" }, en: { t: "Variables (TCI)", c: "T: Trend, C: Consistency, I: Intention" }, es: { t: "Variables (TCI)", c: "T: Trend, C: Consistency, I: Intention" } },
-            duty: { ko: { t: "Information Duty", c: "본 분석은 투자 권유를 의미하지 않습니다." }, en: { t: "Information Duty", c: "Not an investment recommendation." }, es: { t: "Deber de Información", c: "No garantiza inversiones." } }
-        };
-
-        const loginTrans = {
-            ko: { title: "Log In", reset: "비밀번호 찾기", google: "Google 로그인" },
-            en: { title: "Log In", reset: "Forgot Key", google: "Google Login" },
-            es: { title: "Acceso", reset: "Recuperar", google: "Google Entrar" }
-        };
-
-        const mainTxt = {
-            ko: { war: '우리는 "오염된 정보"에 전쟁을 선포한다', eye: '검색 엔진 필터 산업계의 "라의 눈"' },
-            en: { war: 'WE DECLARE WAR ON "CONTAMINATED INFORMATION"', eye: 'THE "EYE OF RA" IN THE SEARCH ENGINE FILTER INDUSTRY' },
-            es: { war: 'DECLARAMOS LA GUERRA A LA "INFORMACIÓN CONTAMINADA"', eye: 'EL "OJO DE RA" EN LA INDUSTRIA DE FILTROS DE BÚSQUEDA' }
-        };
-
-        let currentLang = 'ko';
-        let activeTab = '';
-
-        function openLogin() { document.getElementById('login-modal').classList.remove('hidden'); translateLogin(currentLang); }
+        function openLogin() { document.getElementById('login-modal').classList.remove('hidden'); }
         function closeLogin() { document.getElementById('login-modal').classList.add('hidden'); }
-        
-        function translateLogin(lang) {
-            currentLang = lang;
-            const data = loginTrans[lang];
-            document.getElementById('login-title').innerText = data.title;
-            document.getElementById('btn-pw-reset').innerText = data.reset;
-            document.getElementById('btn-google').innerText = data.google;
-        }
-
-        function openTab(id) {
-            activeTab = id;
-            document.getElementById('unified-modal').classList.remove('hidden');
-            translateTab(currentLang);
-            if(document.getElementById('side-menu').classList.contains('active')) toggleMenu();
-        }
-
-        function closeTab() { document.getElementById('unified-modal').classList.add('hidden'); }
-        function toggleMenu() { document.getElementById('side-menu').classList.toggle('active'); }
-
-        function translateTab(lang) {
-            currentLang = lang;
-            const data = translations[activeTab][lang];
-            document.getElementById('tab-title').innerText = data.t;
-            document.getElementById('tab-content').innerHTML = data.c;
-            document.querySelectorAll('#unified-modal .modal-lang-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('m-' + lang).classList.add('active');
-        }
-
-        function changeMainLang(lang) {
-            currentLang = lang;
-            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('main-' + lang).classList.add('active');
-            document.getElementById('main-war-txt').innerText = mainTxt[lang].war;
-            document.getElementById('main-eye-txt').innerText = mainTxt[lang].eye;
-        }
     </script>
 </body>
 </html>

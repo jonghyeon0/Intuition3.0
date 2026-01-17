@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -52,8 +52,8 @@
         .modal-lang-btn { cursor: pointer; font-weight: bold; border: 1px solid rgba(212, 175, 55, 0.3); padding: 4px 10px; border-radius: 4px; font-size: 12px; }
         .modal-lang-btn.active { background-color: var(--gold-solid); color: black; }
         
-        /* [추가] 구글 버튼 커스텀 위치 */
-        #google_btn { display: flex; justify-content: center; margin-bottom: 1.5rem; }
+        /* 구글 버튼 위치 조정 */
+        #google_btn_area { display: flex; justify-content: center; margin-bottom: 1.5rem; }
     </style>
 </head>
 <body>
@@ -140,15 +140,13 @@
                     </div>
                 </div>
 
-                <div id="google_btn"></div>
-
                 <div class="grid grid-cols-2 gap-4">
                     <button onclick="handleGoogleLogin()" class="border border-[#D4AF37] py-3 flex items-center justify-center space-x-2 hover:bg-[#D4AF37]/10 transition-all">
                         <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-4 h-4">
-                        <span id="btn-google" class="text-[10px] font-bold tracking-tighter">Google 로그인</span>
+                        <span id="btn-google" class="text-[10px] font-bold tracking-tighter uppercase">Google 로그인</span>
                     </button>
                     <button onclick="alert('Key Recovery')" class="border border-[#D4AF37] py-3 flex items-center justify-center hover:bg-[#D4AF37]/10 transition-all">
-                        <span id="btn-pw-reset" class="text-[10px] font-bold tracking-tighter">비밀번호 찾기</span>
+                        <span id="btn-pw-reset" class="text-[10px] font-bold tracking-tighter uppercase">비밀번호 찾기</span>
                     </button>
                 </div>
 
@@ -172,81 +170,51 @@
 
     <script>
         /**
-         * [핵심] 구글 로그인 설정 및 초기화
+         * [최종 통합 엔진] Google OAuth 2.0 & 로그인 처리
          */
-        window.onload = function () {
-            // 프로젝트 번호와 연결된 클라이언트 ID
-            const CLIENT_ID = "1031855227343-1mjtf15p7bu7r1850kdbau002bvd2ue1.apps.googleusercontent.com";
+        const CLIENT_ID = "1031855227343-1mjtf15p7bu7r1850kdbau002bvd2ue1.apps.googleusercontent.com"; //
 
-            // 구글 서비스 초기화
-            google.accounts.id.initialize({
-                client_id: CLIENT_ID,
-                callback: handleCredentialResponse, // 로그인 성공 시 실행될 함수
-                auto_select: false, // 자동 로그인 해제
-                context: "signin"
-            });
-
-            // 화면에 구글 로그인 버튼을 자동으로 생성합니다.
-            google.accounts.id.renderButton(
-                document.getElementById("google_btn"), 
-                { theme: "outline", size: "large", width: 320 } 
-            );
-
-            // 원탭 로그인 프롬프트 표시
-            google.accounts.id.prompt();
-
-            // 기존 로직: URL 파라미터 체크
-            const code = new URLSearchParams(window.location.search).get('code');
-            if (code) document.getElementById('target-stock-display').innerText = code + " 실시간 분석";
+        // 1. 로그인 성공 시 사용자 정보를 낚아채는 로직
+        window.onload = function() {
+            const hash = window.location.hash;
+            if (hash && hash.includes("access_token")) {
+                const token = new URLSearchParams(hash.substring(1)).get("access_token");
+                
+                // 구글 유저 정보 API 호출
+                fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${token}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        // 시스템 UI 업데이트
+                        const displayArea = document.getElementById('target-stock-display');
+                        if (displayArea) displayArea.innerText = `${data.name} [AUTHORIZED ACCESS]`;
+                        alert(`신원 확인 완료: ${data.name}님, Intuition 3.0에 오신 것을 환영합니다.`);
+                    });
+            }
         };
 
-        /**
-         * [보안] 로그인 성공 후 사용자 정보를 처리하는 함수
-         */
-        function handleCredentialResponse(response) {
-            // 구글이 보내준 암호화된 사용자 정보(JWT) 해석
-            const responsePayload = parseJwt(response.credential);
-
-            console.log("ID: " + responsePayload.sub);
-            console.log('Full Name: ' + responsePayload.name);
-            console.log('Email: ' + responsePayload.email);
-
-            // [시스템 적용] 메인 화면에 환영 메시지와 이름을 띄웁니다.
-            const displayArea = document.getElementById('target-stock-display');
-            if (displayArea) {
-                displayArea.innerText = `${responsePayload.name} 팀장님, 환영합니다.`;
-            }
-
-            alert(`${responsePayload.name}님, Intuition 3.0 시스템 접속이 승인되었습니다.`);
-            closeLogin();
-        }
-
-        /**
-         * [도구] 암호화된 구글 데이터를 읽기 가능한 형태로 변환
-         */
-        function parseJwt (token) {
-            var base64Url = token.split('.')[1];
-            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
-
-            return JSON.parse(jsonPayload);
-        }
-
-        /**
-         * [통합] 기존 버튼 클릭 시에도 프롬프트가 뜨도록 연결
-         */
+        // 2. 구글 로그인 실행 함수 (origin_mismatch 방지 지능형 엔진)
         function handleGoogleLogin() {
-            google.accounts.id.prompt();
+            // 현재 접속 중인 주소를 자동으로 감지하여 구글에 전달합니다
+            const REDIRECT_URI = window.location.origin + window.location.pathname; 
+            
+            // 승인 범위 설정 (이메일 및 프로필)
+            const SCOPE = "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
+            
+            // 인증 URL 생성
+            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=${encodeURIComponent(SCOPE)}`;
+            
+            // 구글 성문으로 사출
+            window.location.href = authUrl; 
         }
 
-        // --- 기존 UI 제어 스크립트 ---
+        /**
+         * UI 제어 및 다국어 스크립트 (기본 로직 유지)
+         */
         const translations = {
-            danger: { ko: { t: "[0~0.25]: Danger", c: "◇의미: 물리적 실체(C)가 전무하거나 허위이며, 자본의 의도(I)가 특정 개인/세력의 탈출(Exit)을 위해 극도로 오염된 상태입니다." }, en: { t: "Danger", c: "Physical reality is non-existent. Intent is contaminated for exit strategies." }, es: { t: "Peligro", c: "La realidad física es inexistente." } },
-            philosophy: { ko: { t: "Philosophy", c: `우리 intuition-3.0[ILHAK Inside]는 현재 ai 정보화 시대에 매우 심각한 논리적인 모순을 직면하였다...` }, en: { t: "Philosophy", c: "Intuition-3.0 addresses logical contradictions in the AI age." }, es: { t: "Filosofía", c: "Intuition-3.0 enfrenta contradicciones lógicas." } },
-            variables: { ko: { t: "Variables (TCI)", c: `<span class="highlight-gold">Trend</span> = 과거 데이터 궤적 담당.<br><span class="highlight-gold">Consistency</span> = 현재 물리적 확신 담당.` }, en: { t: "Variables (TCI)", c: "T: Trend (Past Trust), C: Consistency (Physical Evidence)." }, es: { t: "Variables (TCI)", c: "T: Tendencia, C: Consistencia." } },
-            duty: { ko: { t: "Information Duty", c: "본 분석은... 투자 권유 또는 수익 보장을 의미하지 않습니다." }, en: { t: "Information Duty", c: "This analysis is not an investment recommendation." }, es: { t: "Deber de Información", c: "Este análisis no garantiza inversiones." } }
+            danger: { ko: { t: "[0~0.25]: Danger", c: "물리적 실체(C)가 전무하거나 허위인 상태입니다." }, en: { t: "Danger", c: "Physical reality is non-existent." }, es: { t: "Peligro", c: "La realidad física es inexistente." } },
+            philosophy: { ko: { t: "Philosophy", c: `Intuition-3.0은 AI 정보화 시대의 논리적 모순을 해결합니다.` }, en: { t: "Philosophy", c: "Intuition-3.0 addresses AI contradictions." }, es: { t: "Filosofía", c: "Intuition-3.0 enfrenta contradicciones." } },
+            variables: { ko: { t: "Variables (TCI)", c: "T: Trend, C: Consistency, I: Intention" }, en: { t: "Variables (TCI)", c: "T: Trend, C: Consistency, I: Intention" }, es: { t: "Variables (TCI)", c: "T: Trend, C: Consistency, I: Intention" } },
+            duty: { ko: { t: "Information Duty", c: "본 분석은 투자 권유를 의미하지 않습니다." }, en: { t: "Information Duty", c: "Not an investment recommendation." }, es: { t: "Deber de Información", c: "No garantiza inversiones." } }
         };
 
         const loginTrans = {

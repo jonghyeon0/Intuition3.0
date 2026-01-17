@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INTUITION 3.0 | SYSTEM CORE</title>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;700&display=swap');
@@ -68,7 +67,7 @@
     </header>
 
     <main class="min-h-screen flex flex-col items-center justify-center pt-20">
-        <div id="target-stock-display" class="text-[#D4AF37] mb-8 tracking-[0.3em] text-sm font-bold uppercase">READY TO ANALYZE</div>
+        <div id="target-stock-display" class="text-[#D4AF37] mb-8 tracking-[0.3em] text-sm font-bold uppercase transition-all duration-1000">READY TO ANALYZE</div>
 
         <div class="flex justify-center gap-4 md:gap-8 w-full max-w-md mb-12 px-4 relative z-50">
             <div onclick="openTab('danger')" class="status-box">
@@ -115,7 +114,6 @@
             <div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#0a0a0a] border border-[#D4AF37] px-8 py-2 z-10">
                 <h2 id="login-title" class="text-xl tracking-[0.3em] font-bold text-[#D4AF37] uppercase">Log In</h2>
             </div>
-
             <div class="login-container p-12 pt-16 relative">
                 <div class="absolute top-4 right-4 flex items-center space-x-3">
                     <div class="flex space-x-1 border-r border-[#D4AF37]/30 pr-3">
@@ -125,7 +123,6 @@
                     </div>
                     <button onclick="closeLogin()" class="text-[#D4AF37] text-2xl leading-none hover:text-white">&times;</button>
                 </div>
-                
                 <div class="space-y-8 mb-10">
                     <div class="flex items-center">
                         <label class="w-12 font-bold text-sm tracking-widest text-[#D4AF37]">ID:</label>
@@ -136,7 +133,6 @@
                         <input type="password" id="login-pw" class="flex-1 login-input px-2 py-1 text-sm" placeholder="ENTER ACCESS KEY">
                     </div>
                 </div>
-
                 <div class="grid grid-cols-2 gap-4">
                     <button onclick="handleGoogleLogin()" class="border border-[#D4AF37] py-3 flex items-center justify-center space-x-2 hover:bg-[#D4AF37]/10 transition-all">
                         <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-4 h-4">
@@ -146,7 +142,6 @@
                         <span id="btn-pw-reset" class="text-[10px] font-bold tracking-tighter uppercase">비밀번호 찾기</span>
                     </button>
                 </div>
-
                 <button class="w-full mt-6 py-4 bg-[#D4AF37] text-black font-black uppercase tracking-[0.5em] text-xs hover:bg-white transition-all">Execute Access</button>
             </div>
         </div>
@@ -185,21 +180,20 @@
                         const displayArea = document.getElementById('target-stock-display');
                         if (displayArea) {
                             displayArea.innerText = `${data.name} [AUTHORIZED ACCESS]`;
-                            displayArea.classList.add('text-green-500'); // 성공 강조
+                            displayArea.classList.remove('text-[#D4AF37]');
+                            displayArea.classList.add('text-green-500'); // 신원 확인 성공 강조
                         }
                         alert(`신원 확인 완료: ${data.name}님, Intuition 3.0 시스템 접속을 승인합니다.`);
-                        
-                        // 로그인 모달이 열려있다면 닫기
                         closeLogin();
                     })
                     .catch(err => console.error("인증 실패:", err));
             }
         };
 
-        // 2. 구글 로그인 실행 (400 에러 방지 지능형 리디렉션)
+        // 2. 구글 로그인 실행 (정밀 타격 주소 고정)
         function handleGoogleLogin() {
-            // [지능형 경로 인식] 현재 접속한 도메인/IP/파일경로를 100% 일치시켜 전송
-            const REDIRECT_URI = window.location.origin + window.location.pathname; 
+            // [정밀 고정] 콘솔의 '리디렉션 URI' 섹션과 100% 일치해야 에러가 없습니다.
+            const REDIRECT_URI = "http://127.0.0.1:5500/index.html"; 
             
             const SCOPE = "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
             
@@ -211,7 +205,7 @@
         }
 
         /**
-         * UI 제어 및 다국어 로직 (기본 설정 유지)
+         * UI 제어 및 다국어 로직
          */
         const translations = {
             danger: { ko: { t: "[0~0.25]: Danger", c: "물리적 실체(C)가 전무하거나 허위인 상태입니다." }, en: { t: "Danger", c: "Physical reality is non-existent." }, es: { t: "Peligro", c: "La realidad física es inexistente." } },

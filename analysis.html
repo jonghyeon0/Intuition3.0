@@ -2,35 +2,153 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>RA: 상세 분석 리포트</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intuition 3.0: TCI Deep Dive Report</title>
     <style>
-        /* 상세 페이지 전용 럭셔리 스타일 */
-        body { background-color: #000; color: #fff; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .report-box { border: 2px solid #b8860b; padding: 40px; background: #111; box-shadow: 0 0 30px rgba(184, 134, 11, 0.3); text-align: center; }
-        h1 { color: #b8860b; font-size: 2.5rem; margin-bottom: 20px; }
-        .data-point { font-size: 1.5rem; color: #ffd700; margin: 10px 0; }
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Noto+Serif+KR:wght@400;700&display=swap');
+
+        body {
+            background-color: #050505;
+            color: #e0e0e0;
+            font-family: 'Noto Serif KR', serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* 리포트 전체 컨테이너 */
+        .report-wrapper {
+            width: 90%;
+            max-width: 900px;
+            margin: 50px 0;
+            border: 2px solid #b8860b;
+            padding: 40px;
+            background: #0a0a0a;
+            box-shadow: 0 0 50px rgba(184, 134, 11, 0.2);
+            position: relative;
+        }
+
+        /* 상단 타이틀 섹션 */
+        .header {
+            text-align: center;
+            border-bottom: 2px double #b8860b;
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.8rem;
+            color: #b8860b;
+            margin: 0;
+            letter-spacing: 5px;
+        }
+
+        .stock-info {
+            font-size: 1.5rem;
+            color: #ffd700;
+            margin-top: 15px;
+        }
+
+        /* TCI 정밀 분석 그리드 */
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .analysis-card {
+            border: 1px solid #333;
+            padding: 20px;
+            background: #111;
+            transition: 0.3s;
+        }
+
+        .analysis-card:hover {
+            border-color: #b8860b;
+            background: #161616;
+        }
+
+        .card-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            color: #b8860b;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .card-score {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #aaa;
+        }
+
+        /* 하단 주의사항 */
+        .disclaimer {
+            font-size: 0.8rem;
+            color: #555;
+            text-align: center;
+            border-top: 1px solid #222;
+            padding-top: 20px;
+            line-height: 1.5;
+        }
     </style>
 </head>
 <body>
-    <div class="report-box">
-        <h1 id="stock-title">분석 엔진 가동 중...</h1>
-        <div class="data-point" id="stock-code-display">대상을 식별하고 있습니다.</div>
-        <p>TCI 지수 및 정밀 데이터 분석 결과가 이곳에 표출됩니다.</p>
+
+    <div class="report-wrapper">
+        <div class="header">
+            <h1>TCI DEEP DIVE</h1>
+            <div id="stock-code-display" class="stock-info">종목 코드: 분석 중...</div>
+        </div>
+
+        <div class="analysis-grid">
+            <div class="analysis-card">
+                <span class="card-title">TREND</span>
+                <div class="card-score">0.43</div>
+                <div class="card-desc">과거부터 현재까지 이어져 온 데이터의 궤적과 이번 정보의 일치율을 정밀 측정합니다.</div>
+            </div>
+
+            <div class="analysis-card">
+                <span class="card-title">CONSISTENCY</span>
+                <div class="card-score">0.45</div>
+                <div class="card-desc">기고된 내러티브가 실제 현실의 물리적 증거와 갖는 정합성을 역산합니다.</div>
+            </div>
+
+            <div class="analysis-card">
+                <span class="card-title">INTENTION</span>
+                <div class="card-score">0.33</div>
+                <div class="card-desc">발행자의 숨겨진 목적(Hidden Agenda)과 자본의 결속력을 필터링합니다.</div>
+            </div>
+        </div>
+
+        <div class="disclaimer">
+            본 리포트는 TCI 기법에 의해 산출된 데이터 정합성 지표이며, 투자 권유를 의미하지 않습니다.<br>
+            모든 투자 결정의 책임은 사용자 본인에게 있습니다.
+        </div>
     </div>
 
     <script>
         window.onload = () => {
-            // URL에서 ?code=005930 같은 파라미터를 읽어온다
+            // URL 파라미터에서 종목 코드를 읽어옴
             const params = new URLSearchParams(window.location.search);
             const stockCode = params.get('code');
             
             if (stockCode) {
-                // 수신된 코드를 화면에 즉시 박아넣는다
-                document.getElementById('stock-title').innerText = "상세 분석 리포트";
-                document.getElementById('stock-code-display').innerText = "종목 코드: " + stockCode;
-                console.log(stockCode + " 데이터 수신 성공!");
+                document.getElementById('stock-code-display').innerText = "분석 대상: " + stockCode;
+                console.log(stockCode + " 정밀 리포트 가동...");
             } else {
-                document.getElementById('stock-title').innerText = "에러: 종목 정보 없음";
+                document.getElementById('stock-code-display').innerText = "에러: 종목 정보가 전달되지 않았습니다.";
             }
         };
     </script>

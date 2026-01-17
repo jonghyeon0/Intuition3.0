@@ -1,4 +1,4 @@
-   <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -6,9 +6,8 @@
     <title>INTUITION 3.0 | SYSTEM CORE</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Sans+KR:wght@300;400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;700&display=swap');
         
-        /* 1. 시스템 테마 설정 */
         :root {
             --gold-primary: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
             --egypt-blue: #1a2a6c;
@@ -18,7 +17,7 @@
         body { background-color: #000; color: #D4AF37; font-family: 'Cinzel', serif; margin: 0; overflow-x: hidden; }
         .hidden { display: none !important; }
         
-        /* 2. 아이콘 레이아웃 (0.4배 크기 반영) */
+        /* TCI 아이콘 레이아웃 */
         .status-box { flex: 1; max-width: 100px; text-align: center; cursor: pointer; transition: transform 0.3s; z-index: 50; }
         .status-box:hover { transform: translateY(-5px); }
         .icon-circle { 
@@ -26,25 +25,24 @@
             display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 0.5rem;
             background-color: #050505;
         }
-        .icon-circle img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+        .icon-circle img { width: 100%; height: 100%; object-fit: cover; }
         
-        /* 3. 필수 인터페이스: 언어 선택 및 메뉴 */
-        .lang-btn { cursor: pointer; opacity: 0.5; transition: 0.3s; padding: 2px 6px; font-size: 0.75rem; }
+        /* 인터페이스 제어 */
+        .lang-btn { cursor: pointer; opacity: 0.5; transition: 0.3s; padding: 2px 6px; }
         .lang-btn.active { opacity: 1; border-bottom: 2px solid #D4AF37; }
         .glow-text { text-shadow: 0 0 15px rgba(212, 175, 55, 0.5); }
 
-        /* 사이드 메뉴 */
         #side-menu { transition: transform 0.5s ease; transform: translateY(-100%); z-index: 150; position: fixed; inset: 0; background: black; }
         #side-menu.active { transform: translateY(0); }
 
-        /* 4. 파피루스 상세 분석 섹션 */
-        #analysis-section { background-color: #000; padding: 50px 20px; min-height: 100vh; }
-        .papyrus-detailed-view {
-            max-width: 900px; margin: 0 auto; background: var(--papyrus-bg);
-            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-            border-left: 25px solid var(--egypt-blue); border-right: 25px solid var(--egypt-blue);
-            box-shadow: 0 0 100px rgba(0,0,0,0.8); padding: 60px; position: relative; font-family: 'Noto Serif KR', serif;
+        /* 파피루스 모달 시스템 */
+        .papyrus-bg { 
+            background-color: #c2a371; background-image: url('https://www.transparenttextures.com/patterns/papyros.png'); 
+            color: #1a1508; font-family: 'Noto Sans KR', sans-serif; border-left: 12px solid #3e2b1c; border-right: 12px solid #3e2b1c;
         }
+        .modal-lang-btn { cursor: pointer; font-weight: bold; border: 1px solid rgba(26, 21, 8, 0.3); padding: 4px 10px; border-radius: 4px; font-size: 12px; }
+        .modal-lang-btn.active { background-color: #1a1508; color: #c2a371; }
+        .highlight-gold { color: #8a6d3b; font-size: 1.1em; font-weight: 700; text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -62,7 +60,9 @@
     </header>
 
     <main class="min-h-screen flex flex-col items-center justify-center pt-20">
-        <div class="flex justify-center gap-4 md:gap-8 w-full max-w-md mb-16 px-4 relative z-50">
+        <div id="target-stock-display" class="text-[#D4AF37] mb-8 tracking-[0.3em] text-sm font-bold uppercase">READY TO ANALYZE</div>
+
+        <div class="flex justify-center gap-4 md:gap-8 w-full max-w-md mb-12 px-4 relative z-50">
             <div onclick="openTab('danger')" class="status-box">
                 <div class="icon-circle"><img src="1768478515365.jpg"></div>
                 <p class="text-[10px] font-bold text-red-500 uppercase">Danger</p>
@@ -81,12 +81,17 @@
             </div>
         </div>
 
+        <div class="text-center mb-10 px-6">
+            <h2 id="main-war-txt" class="text-lg md:text-2xl tracking-[0.2em] font-light glow-text leading-tight mb-2 uppercase">우리는 "오염된 정보"에 전쟁을 선포한다</h2>
+            <p id="main-eye-txt" class="text-sm md:text-lg tracking-[0.3em] font-light italic uppercase">검색 엔진 필터 산업계의 "라의 눈"</p>
+        </div>
+
         <img src="long.png" class="w-56 h-56 md:w-64 md:h-64 object-contain mb-10">
 
         <div class="text-center">
             <h1 class="text-4xl md:text-6xl tracking-[0.4em] font-light mb-4 glow-text">INTUITION 3.0</h1>
             <p class="text-sm tracking-[0.6em] mb-12 uppercase italic font-bold">The Judgement of T.C.I</p>
-            <button onclick="alert('System Initializing...')" class="px-16 py-4 border border-[#D4AF37] hover:bg-[#D4AF37]/10 tracking-[0.4em] text-xs font-bold uppercase transition-all">Enter System</button>
+            <button onclick="alert('System Initializing...')" class="px-16 py-4 border border-[#D4AF37] hover:bg-[#D4AF37]/10 tracking-[0.4em] text-xs font-bold uppercase">Enter System</button>
         </div>
     </main>
 
@@ -96,17 +101,6 @@
         <button onclick="openTab('duty')" class="text-left uppercase">Information Duty</button>
         <button onclick="toggleMenu()" class="mt-20 text-sm border-b border-[#D4AF37] pb-1 uppercase">Back to main page</button>
     </div>
-
-    <section id="analysis-section" style="display:none;"> 
-        <div class="papyrus-detailed-view">
-            <div id="tci-process-area"></div>
-            <nav class="bottom-nav" style="display: flex; justify-content: space-around; margin-top: 50px; border-top: 3px double #1a2a6c; padding-top: 30px;">
-                <button onclick="location.href='/login'" style="background: #1a2a6c; color: #f2e3bc; border: 2px solid #b8860b; padding: 12px 25px; cursor: pointer;">PRO</button>
-                <button onclick="handlePopup('variables')" style="background: #1a2a6c; color: #f2e3bc; border: 2px solid #b8860b; padding: 12px 25px; cursor: pointer;">Variables</button>
-                <button onclick="handlePopup('disclaimer')" style="background: #1a2a6c; color: #f2e3bc; border: 2px solid #b8860b; padding: 12px 25px; cursor: pointer;">¡</button>
-            </nav>
-        </div>
-    </section>
 
     <div id="unified-modal" class="fixed inset-0 z-[1000] hidden flex items-center justify-center bg-black/90 p-6">
         <div class="papyrus-bg max-w-4xl w-full h-[80vh] p-8 md:p-12 shadow-2xl overflow-y-auto relative">
@@ -122,19 +116,84 @@
     </div>
 
     <script>
-        // 핵심 기능 스크립트 (수정 없이 보존)
-        function toggleMenu() { document.getElementById('side-menu').classList.toggle('active'); }
-        function openTab(id) { /* 기존 모달 제어 로직 */ }
+        const translations = {
+            danger: {
+                ko: { t: "[0~0.25]: Danger", c: "◇의미: 물리적 실체(C)가 전무하거나 허위이며, 자본의 의도(I)가 특정 개인/세력의 탈출(Exit)을 위해 극도로 오염된 상태입니다.<br>◇조언: 즉각적인 정보 차단을 추천드립니다. 이 정보를 믿는 것은 도박이 아닌 자살행위입니다." },
+                en: { t: "[0~0.25]: Danger", c: "Meaning: Physical reality is non-existent. Intent is extremely contaminated for exit strategies. Advice: Immediate blocking recommended." },
+                es: { t: "[0~0.25]: Peligro", c: "Significado: La realidad física es inexistente. Recomendación: Bloqueo inmediato de información." }
+            },
+            warning: {
+                ko: { t: "[0.25~0.5]: Warning", c: "◇의미: 과거의 추세(T)는 존재하나, 현재 보도된 논리(C)에 심각한 결함이 있거나 정보 시차가 맞지 않는 상태입니다.<br>◇조언: 비판적 읽기를 추천드립니다. 증거 수집 시까지 결정을 유보하십시오." },
+                en: { t: "[0.25~0.5]: Warning", c: "Meaning: Past trends exist, but current logic is flawed. Advice: Critical reading recommended." },
+                es: { t: "[0.25~0.5]: Advertencia", c: "Significado: Existen tendencias pasadas, pero la lógica actual es defectuosa." }
+            },
+            safe: {
+                ko: { t: "[0.5~0.75]: Safe", c: "◇의미: 추세(T)와 현재 실체(C)가 일치하기 시작했으며, 의도(I) 또한 시장의 보편적인 상식과 부합하는 상태입니다.<br>◇조언: 검증된 성장의 궤적을 의미합니다. 신뢰의 관성이 붙기 시작한 시점입니다." },
+                en: { t: "[0.5~0.75]: Safe", c: "Meaning: Trends and reality align. Trust inertia is building." },
+                es: { t: "[0.5~0.75]: Seguro", c: "Significado: La tendencia y la realidad coinciden." }
+            },
+            deep: {
+                ko: { t: "[0.75~1.0]: Deep Truth", c: "◇의미: 본질적 실체의 최고의 경지입니다. 추세(T), 실체(C), 의도(I)가 완벽한 삼위일체를 이루어 시간이 흐를수록 가치가 증명되는 정보입니다.<br>◇조언: 강력한 확신을 가져도 좋은 구간입니다." },
+                en: { t: "[0.75~1.0]: Deep Truth", c: "Meaning: Highest state of reality. Perfect trinity of T, C, and I." },
+                es: { t: "[0.75~1.0]: Verdad Profunda", c: "Significado: El estado más alto de la realidad esencial." }
+            },
+            philosophy: {
+                ko: { t: "Philosophy", c: `우리 intuition-3.0[ILHAK Inside]는 현재 ai 정보화 시대에 매우 심각한 논리적인 모순을 직면하였다... (중략) ...올바른 질서를 구축하는 태양신 "라"의 눈의 역할을 할 것이다.` },
+                en: { t: "Philosophy", c: "Intuition-3.0 aims to be the 'Eye of RA', filtering contaminated information in the AI age." },
+                es: { t: "Filosofía", c: "Nuestro objetivo es ser el 'Ojo de RA', filtrando la información contaminada." }
+            },
+            variables: {
+                ko: { t: "Variables (TCI)", c: `<span class="highlight-gold">Trend</span>: 과거 신뢰 관성 측정.<br><span class="highlight-gold">Consistency</span>: 물리적 정합성 측정.<br><span class="highlight-gold">Intentionality</span>: 미래 리스크 필터링.` },
+                en: { t: "Variables (TCI)", c: "T: Trend, C: Consistency, I: Intentionality." },
+                es: { t: "Variables (TCI)", c: "T: Tendencia, C: Consistencia, I: Intención." }
+            },
+            duty: {
+                ko: { t: "Information Duty", c: "본 분석은... 투자 보장을 의미하지 않습니다. 모든 책임은 사용자 본인에게 있습니다." },
+                en: { t: "Information Duty", c: "This is not an investment guarantee. Responsibility lies with the user." },
+                es: { t: "Deber de Información", c: "Este análisis no garantiza inversiones." }
+            }
+        };
+
+        const mainTxt = {
+            ko: { war: '우리는 "오염된 정보"에 전쟁을 선포한다', eye: '검색 엔진 필터 산업계의 "라의 눈"' },
+            en: { war: 'WE DECLARE WAR ON "CONTAMINATED INFORMATION"', eye: 'THE "EYE OF RA" IN THE SEARCH ENGINE FILTER INDUSTRY' },
+            es: { war: 'DECLARAMOS LA GUERRA A LA "INFORMACIÓN CONTAMINADA"', eye: 'EL "OJO DE RA" EN LA INDUSTRIA DE FILTROS DE BÚSQUEDA' }
+        };
+
+        let activeTab = '';
+        let currentLang = 'ko';
+
+        function openTab(id) {
+            activeTab = id;
+            document.getElementById('unified-modal').classList.remove('hidden');
+            translateTab(currentLang);
+            if(document.getElementById('side-menu').classList.contains('active')) toggleMenu();
+        }
+
         function closeTab() { document.getElementById('unified-modal').classList.add('hidden'); }
+        function toggleMenu() { document.getElementById('side-menu').classList.toggle('active'); }
+
+        function translateTab(lang) {
+            currentLang = lang;
+            const data = translations[activeTab][lang];
+            document.getElementById('tab-title').innerText = data.t;
+            document.getElementById('tab-content').innerHTML = data.c;
+            document.querySelectorAll('.modal-lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('m-' + lang).classList.add('active');
+        }
+
         function changeMainLang(lang) {
+            currentLang = lang;
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById('main-' + lang).classList.add('active');
+            document.getElementById('main-war-txt').innerText = mainTxt[lang].war;
+            document.getElementById('main-eye-txt').innerText = mainTxt[lang].eye;
         }
+
         window.onload = function() {
             const code = new URLSearchParams(window.location.search).get('code');
-            if (code) document.getElementById('analysis-section').style.display = 'block';
+            if (code) document.getElementById('target-stock-display').innerText = code + " 실시간 분석";
         };
     </script>
 </body>
 </html>
-                     

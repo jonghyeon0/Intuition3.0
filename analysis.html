@@ -457,6 +457,17 @@ window.onload = async () => {
         }
     }
 };
+// analysis.html의 <script> 태그 안
+window.onload = () => {
+    const params = new URLSearchParams(window.location.search);
+    const stockCode = params.get('code');
+    
+    if (stockCode) {
+        console.log("분석 대상 종목 코드:", stockCode);
+        // 여기서 팀장의 분석 엔진을 가동시켜라
+        if (typeof startAnalysis === 'function') startAnalysis(stockCode);
+    }
+};
 </script>
 </body>
 </html>

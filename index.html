@@ -51,9 +51,6 @@
 
         .modal-lang-btn { cursor: pointer; font-weight: bold; border: 1px solid rgba(212, 175, 55, 0.3); padding: 4px 10px; border-radius: 4px; font-size: 12px; }
         .modal-lang-btn.active { background-color: var(--gold-solid); color: black; }
-        
-        /* 구글 버튼 위치 조정 */
-        #google_btn_area { display: flex; justify-content: center; margin-bottom: 1.5rem; }
     </style>
 </head>
 <body>
@@ -170,48 +167,57 @@
 
     <script>
         /**
-         * [최종 통합 엔진] Google OAuth 2.0 & 로그인 처리
+         * [최종 통합 엔진] Google OAuth 2.0 및 신원 확인 시스템
          */
         const CLIENT_ID = "1031855227343-1mjtf15p7bu7r1850kdbau002bvd2ue1.apps.googleusercontent.com"; //
 
-        // 1. 로그인 성공 시 사용자 정보를 낚아채는 로직
+        // 1. 페이지 로드 시 구글로부터 돌아온 토큰이 있는지 확인
         window.onload = function() {
             const hash = window.location.hash;
             if (hash && hash.includes("access_token")) {
                 const token = new URLSearchParams(hash.substring(1)).get("access_token");
                 
-                // 구글 유저 정보 API 호출
+                // 구글 유저 정보 API 호출하여 실명/이메일 획득
                 fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${token}`)
                     .then(res => res.json())
                     .then(data => {
-                        // 시스템 UI 업데이트
+                        // [UI 반영] 상단 상태창에 사용자 이름 주입
                         const displayArea = document.getElementById('target-stock-display');
-                        if (displayArea) displayArea.innerText = `${data.name} [AUTHORIZED ACCESS]`;
-                        alert(`신원 확인 완료: ${data.name}님, Intuition 3.0에 오신 것을 환영합니다.`);
-                    });
+                        if (displayArea) {
+                            displayArea.innerText = `${data.name} [AUTHORIZED ACCESS]`;
+                            displayArea.classList.add('text-green-500'); // 성공 강조
+                        }
+                        alert(`신원 확인 완료: ${data.name}님, Intuition 3.0 시스템 접속을 승인합니다.`);
+                        
+                        // 로그인 모달이 열려있다면 닫기
+                        closeLogin();
+                    })
+                    .catch(err => console.error("인증 실패:", err));
             }
         };
 
-        // 2. 구글 로그인 실행 함수 (origin_mismatch 방지 지능형 엔진)
+        // 2. 구글 로그인 실행 (400 에러 방지 지능형 리디렉션)
         function handleGoogleLogin() {
-            // 현재 접속 중인 주소를 자동으로 감지하여 구글에 전달합니다
+            // [지능형 경로 인식] 현재 접속한 도메인/IP/파일경로를 100% 일치시켜 전송
             const REDIRECT_URI = window.location.origin + window.location.pathname; 
             
-            // 승인 범위 설정 (이메일 및 프로필)
             const SCOPE = "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
             
-            // 인증 URL 생성
+            // 인증 URL 조립
             const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=${encodeURIComponent(SCOPE)}`;
             
-            // 구글 성문으로 사출
+            console.log("인증 시도 경로:", REDIRECT_URI);
             window.location.href = authUrl; 
         }
 
         /**
-         * UI 제어 및 다국어 스크립트 (기본 로직 유지)
+         * UI 제어 및 다국어 로직 (기본 설정 유지)
          */
         const translations = {
             danger: { ko: { t: "[0~0.25]: Danger", c: "물리적 실체(C)가 전무하거나 허위인 상태입니다." }, en: { t: "Danger", c: "Physical reality is non-existent." }, es: { t: "Peligro", c: "La realidad física es inexistente." } },
+            warning: { ko: { t: "[0.25~0.5]: Warning", c: "정보의 일관성이 부족합니다." }, en: { t: "Warning", c: "Inconsistent information." }, es: { t: "Aviso", c: "Información inconsistente." } },
+            safe: { ko: { t: "[0.5~0.75]: Safe", c: "신뢰할 수 있는 데이터입니다." }, en: { t: "Safe", c: "Reliable data." }, es: { t: "Seguro", c: "Datos confiables." } },
+            deep: { ko: { t: "[0.75~1.0]: Deep Truth", c: "완전한 팩트와 의도가 확인되었습니다." }, en: { t: "Deep Truth", c: "Verified facts and intentions." }, es: { t: "Verdad Profunda", c: "Hechos e intenciones verificados." } },
             philosophy: { ko: { t: "Philosophy", c: `Intuition-3.0은 AI 정보화 시대의 논리적 모순을 해결합니다.` }, en: { t: "Philosophy", c: "Intuition-3.0 addresses AI contradictions." }, es: { t: "Filosofía", c: "Intuition-3.0 enfrenta contradicciones." } },
             variables: { ko: { t: "Variables (TCI)", c: "T: Trend, C: Consistency, I: Intention" }, en: { t: "Variables (TCI)", c: "T: Trend, C: Consistency, I: Intention" }, es: { t: "Variables (TCI)", c: "T: Trend, C: Consistency, I: Intention" } },
             duty: { ko: { t: "Information Duty", c: "본 분석은 투자 권유를 의미하지 않습니다." }, en: { t: "Information Duty", c: "Not an investment recommendation." }, es: { t: "Deber de Información", c: "No garantiza inversiones." } }

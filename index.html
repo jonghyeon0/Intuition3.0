@@ -162,45 +162,44 @@
 
     <script>
         /**
-         * [최종 통합 엔진] Google OAuth 2.0 및 신원 확인 시스템
+         * [Vercel 실전 배포 엔진] Google OAuth 2.0 및 신원 확인 시스템
          */
-        const CLIENT_ID = "1031855227343-1mjtf15p7bu7r1850kdbau002bvd2ue1.apps.googleusercontent.com"; //
 
-        // 1. 페이지 로드 시 구글로부터 돌아온 토큰이 있는지 확인
+        // 1. 페이지 로드 시 구글 토큰 수신 및 사용자 이름 처리
         window.onload = function() {
             const hash = window.location.hash;
             if (hash && hash.includes("access_token")) {
                 const token = new URLSearchParams(hash.substring(1)).get("access_token");
                 
-                // 구글 유저 정보 API 호출하여 실명/이메일 획득
+                // 구글 유저 정보 API 호출
                 fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${token}`)
                     .then(res => res.json())
                     .then(data => {
-                        // [UI 반영] 상단 상태창에 사용자 이름 주입
+                        // [UI 반영] 상단 상태창에 팀장님 실명 주입
                         const displayArea = document.getElementById('target-stock-display');
                         if (displayArea) {
                             displayArea.innerText = `${data.name} [AUTHORIZED ACCESS]`;
                             displayArea.classList.remove('text-[#D4AF37]');
-                            displayArea.classList.add('text-green-500'); // 신원 확인 성공 강조
+                            displayArea.classList.add('text-green-500'); // 신원 확인 성공 시 녹색 점등
                         }
-                        alert(`신원 확인 완료: ${data.name}님, Intuition 3.0 시스템 접속을 승인합니다.`);
+                        alert(`신원 확인 완료: ${data.name} 팀장님, Intuition 3.0 시스템 접속을 승인합니다.`);
                         closeLogin();
                     })
-                    .catch(err => console.error("인증 실패:", err));
+                    .catch(err => console.error("인증 처리 실패:", err));
             }
         };
 
-        // 2. 구글 로그인 실행 (정밀 타격 주소 고정)
+        // 2. 구글 로그인 실행 (팀장님의 Vercel 도메인 고정)
         function handleGoogleLogin() {
-            // [정밀 고정] 콘솔의 '리디렉션 URI' 섹션과 100% 일치해야 에러가 없습니다.
-            const REDIRECT_URI = "http://127.0.0.1:5500/index.html"; 
+            // 사진 b84b15d1에서 확인한 팀장님의 클라이언트 ID
+            const CLIENT_ID = "1031855227343-1mjtf15p7bu7r1850kdbau002bvd2ue1.apps.googleusercontent.com"; 
             
-            const SCOPE = "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
+            // [Vercel 전용] 구글 콘솔에 등록한 리디렉션 URI와 100% 일치
+            const REDIRECT_URI = "https://intuition3-0.vercel.app/index.html"; 
             
-            // 인증 URL 조립
-            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=${encodeURIComponent(SCOPE)}`;
+            // 신원 정보(이메일, 프로필) 요청 스코프 설정
+            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=email%20profile`;
             
-            console.log("인증 시도 경로:", REDIRECT_URI);
             window.location.href = authUrl; 
         }
 

@@ -134,13 +134,11 @@
                         <input type="password" id="login-pw" class="flex-1 login-input bg-transparent px-2 py-1 text-white text-sm" placeholder="ENTER ACCESS KEY">
                     </div>
                 </div>
-                
                 <div class="grid grid-cols-2 gap-4">
                     <button onclick="handleGoogleLogin()" class="border border-[#D4AF37] py-3 flex items-center justify-center space-x-2 hover:bg-[#D4AF37]/10 transition-all">
                         <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-4 h-4">
                         <span id="btn-google" class="text-[10px] font-bold tracking-tighter">Google 로그인</span>
                     </button>
-                    
                     <button onclick="alert('Key Recovery')" class="border border-[#D4AF37] py-3 flex items-center justify-center hover:bg-[#D4AF37]/10 transition-all">
                         <span id="btn-pw-reset" class="text-[10px] font-bold tracking-tighter">비밀번호 찾기</span>
                     </button>
@@ -164,7 +162,7 @@
     </div>
 
     <script>
-        // [삽입] Google OAuth 2.0 실행 로직
+        // [삽입] Google OAuth 2.0 실행 함수
         function handleGoogleLogin() {
             const CLIENT_ID = "여기에_발급받은_ID_입력.apps.googleusercontent.com"; //
             const REDIRECT_URI = "https://ilhacos-os.com"; 
@@ -172,18 +170,21 @@
             
             const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=${SCOPE}`;
             
-            window.location.href = authUrl; // 구글 서버로 사용자 전송
+            window.location.href = authUrl; // 구글 서버로 리다이렉트
         }
 
         const translations = {
             danger: { ko: { t: "[0~0.25]: Danger", c: "◇의미: 물리적 실체(C)가 전무하거나 허위이며, 자본의 의도(I)가 특정 개인/세력의 탈출(Exit)을 위해 극도로 오염된 상태입니다.<br>◇조언: 즉각적인 정보 차단을 추천드립니다. 이 정보를 믿는 것은 도박이 아닌 자살행위입니다." }, en: { t: "Danger", c: "Physical reality is non-existent. Intent is contaminated for exit strategies. Immediate blocking recommended." }, es: { t: "Peligro", c: "La realidad física es inexistente. Se recomienda el bloqueo inmediato." } },
+            warning: { ko: { t: "[0.25~0.5]: Warning", c: "◇의미: 과거의 추세(T)는 존재하나, 현재 보도된 논리(C)에 심각한 결함이 있거나 정보 시차가 맞지 않는 상태입니다.<br>◇조언: 비판적 읽기를 추천드립니다. 증거 수집 시까지 결정을 유보하십시오." }, en: { t: "Warning", c: "Past trends exist but current logic is flawed. Critical reading recommended." }, es: { t: "Advertencia", c: "Existen tendencias pasadas pero la lógica es defectuosa." } },
+            safe: { ko: { t: "[0.5~0.75]: Safe", c: "◇의미: 추세(T)와 현재 실체(C)가 일치하기 시작했으며, 의도(I) 또한 시장의 보편적인 상식과 부합하는 상태입니다.<br>◇조언: 검증된 성장의 궤적을 의미합니다. 신뢰의 관성이 붙기 시작한 시점입니다." }, en: { t: "Safe", c: "Trends and reality align. Trust inertia is building." }, es: { t: "Seguro", c: "La tendencia y la realidad coinciden." } },
+            deep: { ko: { t: "[0.75~1.0]: Deep Truth", c: "◇의미: 본질적 실체의 최고의 경지입니다. 추세(T), 실체(C), 의도(I)가 완벽한 삼위일체를 이루어 시간이 흐를수록 가치가 증명되는 정보입니다.<br>◇조언: 강력한 확신을 가져도 좋은 구간입니다." }, en: { t: "Deep Truth", c: "Highest state of reality. Perfect trinity of T, C, and I." }, es: { t: "Verdad Profunda", c: "El estado más alto de la realidad esencial." } },
             philosophy: {
-                ko: { t: "Philosophy", c: `우리 intuition-3.0[ILHAK Inside]는 현재 ai 정보화 시대에 매우 심각한 논리적인 모순을 직면하였다... (중략) ...올바른 질서를 구축하는 태양신 "라"의 눈의 역할을 할 것이다.` },
+                ko: { t: "Philosophy", c: `우리 intuition-3.0[ILHAK Inside]는 현재 ai 정보화 시대에 매우 심각한 논리적인 모순을 직면하였다... (중략) ...태양신 "라"의 눈의 역할을 할 것이다.` },
                 en: { t: "Philosophy", c: "Intuition-3.0 addresses logical contradictions in the AI age. We serve as the 'Eye of RA'." },
                 es: { t: "Filosofía", c: "Intuition-3.0 enfrenta contradicciones lógicas. Seremos el 'Ojo de RA'." }
             },
             variables: {
-                ko: { t: "Variables (TCI)", c: `<span class="highlight-gold">Danger/Warning</span>: 의도를 파헤쳐 파괴해야 할 대상.<br><span class="highlight-gold">Safe/Deep Truth</span>: 팩트를 축적하여 보존해야 할 대상.<br><br><span class="highlight-gold">Trend</span> = 과거 데이터 궤적 담당.<br><span class="highlight-gold">Consistency</span> = 현재 물리적 확신 담당.<br><span class="highlight-gold">Intentionality</span> = 미래 리스크 필터 담당.` },
+                ko: { t: "Variables (TCI)", c: `<span class="highlight-gold">Danger/Warning</span>: 의도를 파헤쳐 파괴해야 할 대상.<br><span class="highlight-gold">Safe/Deep Truth</span>: 팩트를 축적하여 보존해야 할 대상.<br><br><span class="highlight-gold">Trend</span> = 과거부터 현재까지 이어져 온 데이터의 궤적과 이번 정보가 얼마나 일치하는가를 측정합니다. 과거의 신뢰 관성을 담당합니다.<br><br><span class="highlight-gold">Consistency</span> = 기사가 기고한 내러티브가 실제 현실의 물리적 증거와 얼마나 정합성을 갖는가를 측정합니다. 현재의 물리적 확신을 담당합니다.<br><br><span class="highlight-gold">Intentionality</span> = 정보 발행자가 숨기고 있는 진짜 목적(Hidden Agenda)과 자본의 결속력을 역산합니다. 미래의 리스크 필터를 담당합니다.` },
                 en: { t: "Variables (TCI)", c: "T: Trend (Past Trust), C: Consistency (Physical Evidence), I: Intentionality (Risk Filter)." },
                 es: { t: "Variables (TCI)", c: "T: Tendencia, C: Consistencia, I: Intencionalidad." }
             },

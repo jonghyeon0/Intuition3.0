@@ -7,83 +7,101 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;700&display=swap');
-        :root { --gold-solid: #D4AF37; }
-        body { background-color: #000; color: var(--gold-solid); font-family: 'Cinzel', serif; margin: 0; overflow-x: hidden; }
+        :root { --gold: #D4AF37; --danger: #FF4136; --warning: #FF851B; --safe: #2ECC40; --deep: #0074D9; }
+        body { background-color: #000; color: var(--gold); font-family: 'Cinzel', 'Noto Sans KR', serif; margin: 0; overflow-x: hidden; }
+        .gold-glow { drop-shadow: 0 0 15px rgba(212, 175, 55, 0.7); }
         .hidden { display: none !important; }
-        .modal-overlay { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.9); }
-        .login-container { border: 1px solid var(--gold-solid); background: #0a0a0a; color: var(--gold-solid); }
-        .login-input { background: transparent; border-bottom: 1px solid rgba(212, 175, 55, 0.5); outline: none; width: 100%; color: white; }
-        .status-box { flex: 1; max-width: 100px; text-align: center; cursor: pointer; transition: transform 0.3s; z-index: 50; }
-        .icon-circle { width: 100%; aspect-ratio: 1/1; border-radius: 50%; border: 1px solid rgba(212, 175, 55, 0.3); display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 0.5rem; background-color: #050505; }
-        .icon-circle img { width: 100%; height: 100%; object-fit: cover; }
-        .papyrus-bg { background-color: #c2a371; background-image: url('https://www.transparenttextures.com/patterns/papyros.png'); color: #1a1508; font-family: 'Noto Sans KR', sans-serif; border-left: 12px solid #3e2b1c; border-right: 12px solid #3e2b1c; box-shadow: 0 0 50px rgba(212, 175, 55, 0.2); }
+        /* 라의 눈 회전 애니메이션 */
+        @keyframes orbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .eye-orbit { border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 50%; animation: orbit 15s linear infinite; }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
 
-    <header class="fixed top-0 left-0 w-full p-6 flex justify-end items-center z-[200] space-x-6">
-        <div class="flex space-x-3 text-xs tracking-widest border-r border-[#D4AF37]/30 pr-6">
-            <span onclick="changeMainLang('ko')" id="main-ko" class="cursor-pointer opacity-100 border-b-2 border-[#D4AF37]">KO</span>
-            <span onclick="changeMainLang('en')" id="main-en" class="cursor-pointer opacity-50">EN</span>
-            <span onclick="changeMainLang('es')" id="main-es" class="cursor-pointer opacity-50">ES</span>
+    <header class="fixed top-0 w-full p-8 flex justify-between items-start z-50">
+        <div id="target-stock-display" class="text-xs tracking-[0.3em] font-bold uppercase opacity-80">
+            READY TO ANALYZE
+        </div>
+        
+        <div class="flex items-center space-x-6">
+            <div class="text-[10px] space-x-2 font-bold tracking-widest">
+                <button onclick="changeLang('KO')" class="hover:text-white transition-colors">KO</button>
+                <span class="opacity-30">|</span>
+                <button onclick="changeLang('EN')" class="hover:text-white transition-colors">EN</button>
+            </div>
+            <button id="admin-menu-btn" onclick="toggleMenu()" class="hidden text-2xl hover:scale-110 transition-transform">&#9776;</button>
         </div>
     </header>
 
-    <main class="min-h-screen flex flex-col items-center justify-center pt-20">
-        <div id="target-stock-display" class="text-[#D4AF37] mb-8 tracking-[0.3em] text-sm font-bold uppercase transition-all duration-1000">READY TO ANALYZE</div>
-
-        <div class="flex justify-center gap-4 md:gap-8 w-full max-w-md mb-12 px-4 relative z-50">
-            <div class="status-box"><div class="icon-circle"><img src="1768478515365.jpg"></div><p class="text-[10px] font-bold text-red-500">DANGER</p></div>
-            <div class="status-box"><div class="icon-circle"><img src="1768478520039.jpg"></div><p class="text-[10px] font-bold text-orange-500">WARNING</p></div>
-            <div class="status-box"><div class="icon-circle"><img src="1768478522258.jpg"></div><p class="text-[10px] font-bold text-green-500">SAFE</p></div>
-            <div class="status-box"><div class="icon-circle"><img src="1768478524524.jpg"></div><p class="text-[10px] font-bold text-blue-500">DEEP TRUTH</p></div>
+    <section class="text-center flex flex-col items-center">
+        <div class="relative w-48 h-48 mb-12 flex items-center justify-center">
+            <div class="absolute inset-0 eye-orbit"></div>
+            <div class="absolute inset-4 eye-orbit" style="animation-direction: reverse; animation-duration: 10s;"></div>
+            <img src="https://i.ibb.co/L9nS9Xp/eye-of-ra-gold.png" alt="Eye of Ra" class="w-24 h-24 object-contain filter drop-shadow(0 0 10px var(--gold))">
         </div>
 
-        <div class="text-center mb-10 px-6">
-            <h2 id="main-war-txt" class="text-lg md:text-2xl tracking-[0.2em] font-light mb-2 uppercase">우리는 "오염된 정보"에 전쟁을 선포한다</h2>
-            <p id="main-eye-txt" class="text-sm md:text-lg tracking-[0.3em] font-light italic uppercase font-bold">검색 엔진 필터 산업계의 "라의 눈"</p>
+        <h1 class="text-5xl md:text-7xl tracking-[0.4em] font-light mb-6">INTUITION 3.0</h1>
+        <div id="main-subtitle" class="text-xs md:text-sm tracking-[0.6em] mb-12 italic opacity-90">
+            THE JUDGEMENT OF T.C.I
         </div>
 
-        <div class="text-center">
-            <h1 class="text-4xl md:text-6xl tracking-[0.4em] font-light mb-4">INTUITION 3.0</h1>
-            <p class="text-sm tracking-[0.6em] mb-12 uppercase italic font-bold">The Judgement of T.C.I</p>
-            <button onclick="openLogin()" class="px-16 py-4 border border-[#D4AF37] hover:bg-[#D4AF37]/10 tracking-[0.4em] text-xs font-bold uppercase transition-all">Enter System</button>
-        </div>
-    </main>
-
-    <div id="login-modal" class="modal-overlay hidden">
-        <div class="relative w-full max-w-md mx-4">
-            <div class="login-container p-12 pt-16 relative">
-                <button onclick="closeLogin()" class="absolute top-4 right-4 text-[#D4AF37] text-2xl">&times;</button>
-                <div class="space-y-8 mb-10">
-                    <div class="flex items-center"><label class="w-12 font-bold text-sm text-[#D4AF37]">ID:</label><input type="text" class="flex-1 login-input px-2 text-sm" placeholder="ENTER IDENTITY"></div>
-                    <div class="flex items-center"><label class="w-12 font-bold text-sm text-[#D4AF37]">PW:</label><input type="password" class="flex-1 login-input px-2 text-sm" placeholder="ENTER ACCESS KEY"></div>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <button onclick="handleGoogleLogin()" class="border border-[#D4AF37] py-3 flex items-center justify-center space-x-2 hover:bg-[#D4AF37]/10 transition-all">
-                        <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-4 h-4">
-                        <span class="text-[10px] font-bold uppercase">Google 로그인</span>
-                    </button>
-                    <button class="border border-[#D4AF37] py-3 text-[10px] font-bold uppercase">비밀번호 찾기</button>
-                </div>
-                <button class="w-full mt-6 py-4 bg-[#D4AF37] text-black font-black tracking-[0.5em] text-xs">Execute Access</button>
+        <div class="flex space-x-8 mb-16 opacity-0 transition-opacity duration-1000" id="tci-icons">
+            <div class="flex flex-col items-center space-y-2">
+                <div class="w-10 h-10 border border-[var(--danger)] rounded-full flex items-center justify-center text-[var(--danger)] text-[8px] font-bold">DANGER</div>
             </div>
+            <div class="flex flex-col items-center space-y-2">
+                <div class="w-10 h-10 border border-[var(--warning)] rounded-full flex items-center justify-center text-[var(--warning)] text-[8px] font-bold">WARNING</div>
+            </div>
+            <div class="flex flex-col items-center space-y-2">
+                <div class="w-10 h-10 border border-[var(--safe)] rounded-full flex items-center justify-center text-[var(--safe)] text-[8px] font-bold">SAFE</div>
+            </div>
+            <div class="flex flex-col items-center space-y-2">
+                <div class="w-10 h-10 border border-[var(--deep)] rounded-full flex items-center justify-center text-[var(--deep)] text-[8px] font-bold">DEEP</div>
+            </div>
+        </div>
+
+        <button id="enter-btn" onclick="handleGoogleLogin()" class="px-12 py-3 border border-[#D4AF37] hover:bg-[#D4AF37]/10 tracking-[0.5em] text-[10px] font-bold uppercase transition-all">
+            Execute Access
+        </button>
+    </section>
+
+    <div id="side-menu" class="fixed inset-y-0 right-0 w-64 bg-[#0a0a0a] border-l border-[#D4AF37]/30 translate-x-full transition-transform duration-300 z-[100] p-10 flex flex-col space-y-8">
+        <button onclick="toggleMenu()" class="text-right text-xl">&times;</button>
+        <h3 class="text-xs tracking-widest border-b border-[#D4AF37]/20 pb-4">ADMIN PANEL</h3>
+        <nav class="flex flex-col space-y-6 text-[10px] tracking-[0.3em]">
+            <a href="#" class="hover:text-white">DATABASE STATUS</a>
+            <a href="#" class="hover:text-white">T.C.I ALGORITHM</a>
+            <a href="#" class="hover:text-white">API CONNECTIVITY</a>
+            <a href="#" class="hover:text-white">USER LOGS</a>
+        </nav>
+        <div class="mt-auto opacity-30 text-[8px] tracking-tighter">
+            SYSTEM ID: 1031855227343<br>AUTH: LEVEL 01
         </div>
     </div>
 
     <script>
-        // 1. 구글 로그인 실행 엔진 (Vercel 도메인 고정)
+        const CLIENT_ID = "1031855227343-1mjtf15p7bu7r1850kdbau002bvd2ue1.apps.googleusercontent.com"; //
+        const REDIRECT_URI = "https://intuition3-0.vercel.app/index.html"; //
+
+        // [기능 1] 구글 로그인 가동
         function handleGoogleLogin() {
-            const CLIENT_ID = "1031855227343-1mjtf15p7bu7r1850kdbau002bvd2ue1.apps.googleusercontent.com";
-            const REDIRECT_URI = "https://intuition3-0.vercel.app/index.html";
-            
-            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=email%20profile`;
-            
-            console.log("Vercel에서 요청하는 리디렉션 주소:", REDIRECT_URI);
-            window.location.href = authUrl; 
+            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=email profile`;
+            window.location.href = authUrl;
         }
 
-        // 2. 신원 확인 및 성명 점등 로직
+        // [기능 2] 다국어 시스템 (사진 4799cc3a 반영)
+        const langPack = {
+            KO: { subtitle: "우리는 \"오염된 정보\"에 전쟁을 선포한다", display: "분석 준비 완료" },
+            EN: { subtitle: "WE DECLARE WAR ON \"POLLUTED INFORMATION\"", display: "READY TO ANALYZE" }
+        };
+        function changeLang(lang) {
+            document.getElementById('main-subtitle').innerText = langPack[lang].subtitle;
+            if(!document.getElementById('target-stock-display').innerText.includes('AUTHORIZED')) {
+                document.getElementById('target-stock-display').innerText = langPack[lang].display;
+            }
+        }
+
+        // [기능 3] 로그인 사후 처리 및 UI 복구
         window.onload = function() {
             const hash = window.location.hash;
             if (hash && hash.includes("access_token")) {
@@ -91,19 +109,19 @@
                 fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${token}`)
                     .then(res => res.json())
                     .then(data => {
-                        const display = document.getElementById('target-stock-display');
-                        if (display) {
-                            display.innerText = `${data.name} [AUTHORIZED ACCESS]`;
-                            display.classList.replace('text-[#D4AF37]', 'text-green-500'); // 녹색 승인등 점등
-                        }
-                        alert(`신원 확인 완료: ${data.name} 팀장님, 접속을 승인합니다.`);
-                        closeLogin();
+                        // 성함 노출 및 권한 표시
+                        document.getElementById('target-stock-display').innerText = `${data.name} [AUTHORIZED ACCESS]`;
+                        document.getElementById('target-stock-display').classList.add('text-green-500');
+                        
+                        // 숨겨진 메뉴 및 아이콘 활성화
+                        document.getElementById('admin-menu-btn').classList.remove('hidden');
+                        document.getElementById('tci-icons').classList.remove('opacity-0');
+                        document.getElementById('enter-btn').classList.add('hidden');
                     });
             }
         };
 
-        function openLogin() { document.getElementById('login-modal').classList.remove('hidden'); }
-        function closeLogin() { document.getElementById('login-modal').classList.add('hidden'); }
+        function toggleMenu() { document.getElementById('side-menu').classList.toggle('translate-x-full'); }
     </script>
 </body>
 </html>
